@@ -1,0 +1,29 @@
+[
+  {
+    "id": "nobilia-2024",
+    "title": "Catalogue Nobilia 2024",
+    "description": "Découvrez toutes les nouveautés cuisines Nobilia",
+    "fournisseurId": "nobilia",
+    "pdfUrl": "/catalogues/pdf/1769940108549-Devis_-_HANGARMANAGER.pdf",
+    "coverImage": "/catalogues/covers/nobilia-2024.jpg",
+    "year": 2024
+  },
+  {
+    "id": "siemens-electromenager-2024",
+    "title": "Électroménager Siemens 2024",
+    "description": "La gamme complète d'électroménager Siemens",
+    "fournisseurId": "siemens",
+    "pdfUrl": "/catalogues/siemens-2024.pdf",
+    "coverImage": "/catalogues/covers/siemens-2024.jpg",
+    "year": 2024
+  },
+  {
+    "id": "blanco-eviers-2024",
+    "title": "Éviers et Robinetterie Blanco",
+    "description": "Solutions complètes pour votre évier de cuisine",
+    "fournisseurId": "blanco",
+    "pdfUrl": "/catalogues/blanco-2024.pdf",
+    "coverImage": "/catalogues/covers/blanco-2024.jpg",
+    "year": 2024
+  }
+]

@@ -1,0 +1,44 @@
+# Prompts Midjourney pour ABP Partner
+
+Voici une liste de prompts optimisés pour générer des images ultra-réalistes et stylées pour votre nouveau site. Copiez-collez ces textes dans Midjourney.
+
+## 1. Image Hero (Bandeau principal)
+**Description :** Une cuisine ultra-moderne, luxueuse, tons sombres et dorés.
+**Prompt :**
+> cinematic wide shot of an ultra-luxury modern kitchen, matte black cabinets with gold brass handles, large white marble island with waterfall edge, warm ambient led lighting under cabinets, floor to ceiling windows with view of a city at twilight, hyper-realistic, 8k, architectural photography, interior design magazine style, dramatic lighting --ar 16:9 --v 6.0
+
+## 2. Section "À Domicile" (Concept)
+**Description :** Un designer travaillant sur une tablette dans un salon moderne.
+**Prompt :**
+> professional interior designer man in smart casual suit sketching on an iPad Pro, standing in a bright modern living room, blurred background showing a happy couple looking at samples, high depth of field, professional photography, soft natural lighting, 8k --ar 4:3 --v 6.0
+
+## 3. Section "Votre Projet" (3D / Technologie)
+**Description :** Gros plan sur un écran montrant un rendu 3D photoréaliste.
+**Prompt :**
+> close-up shot of a high-tech computer monitor displaying a photorealistic 3D wireframe render of a kitchen cabinet, digital blueprint overlay, depth of field, blue and orange lighting accents, tech atmosphere, 8k, detailed texture --ar 16:9 --v 6.0
+
+## 4. Portfolio - Cuisine Casher / Grand Luxe
+**Description :** Grande cuisine blanche, double équipements, très épurée.
+**Prompt :**
+> spacious luxury kosher kitchen design, pristine white high-gloss cabinets, double stainless steel sinks, double ovens, minimalist style, very clean lines, bright daylight, marble floor, high-end appliances, architectural digest style, 8k --ar 3:2 --v 6.0
+
+## 5. Portfolio - Optimisation Espace (Petit appartement)
+**Description :** Cuisine compacte mais chic, optimisation intelligente.
+**Prompt :**
+> clever compact modern kitchen design in a small Parisian apartment, smart storage solutions, light oak wood cabinets mixed with sage green, cozy atmosphere, soft morning light, interior design photography, highly detailed, 8k --ar 3:2 --v 6.0
+
+## 6. Portfolio - Ambiance Sombre & Chic (Défi Lumière)
+**Description :** Cuisine sombre, éclairage artificiel dramatique.
+**Prompt :**
+> moody modern kitchen design, dark grey matte finish, dramatic artificial LED lighting strips integrated into shelves, black backsplash, sleek and masculine design, cinematic lighting, shadows and contrast, 8k, photorealistic --ar 3:2 --v 6.0
+
+## 7. Section Conseil (Business)
+**Description :** Ambiance bureau moderne, consulting.
+**Prompt :**
+> modern corporate meeting room, glass walls, blurred silhouette of professionals shaking hands, abstract business concept, blue and white tones, clean, professional atmosphere, high quality stock photography style --ar 16:9 --v 6.0
+
+---
+**Conseils pour Midjourney :**
+- Utilisez `--ar 16:9` pour les images larges (bannières).
+- Utilisez `--ar 3:2` ou `--ar 4:3` pour les images de contenu.
+- Ajoutez `--style raw` si vous voulez un rendu moins "artistique" et plus "photo".

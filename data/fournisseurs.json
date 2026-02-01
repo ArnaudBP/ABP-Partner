@@ -1,0 +1,57 @@
+[
+  {
+    "id": "nobilia",
+    "name": "Ballerina",
+    "description": "Leader allemand de la cuisine équipée. Qualité exceptionnelle et design contemporain.",
+    "logo": "/fournisseurs/1769954674867-WhatsApp_Image_2025-12-29_at_15.28.38.jpeg",
+    "website": "https://www.ballerina-cuisine.fr/",
+    "featured": true,
+    "cataloguePdf": "/catalogues/pdf/1769955357663-Ballerina-K_chen___Magazine.pdf",
+    "order": 0
+  },
+  {
+    "id": "siemens",
+    "name": "Siemens",
+    "description": "Électroménager haut de gamme allemand. Innovation et fiabilité reconnues.",
+    "logo": "/fournisseurs/siemens.png",
+    "website": "https://www.siemens.fr",
+    "featured": true,
+    "order": 1
+  },
+  {
+    "id": "blanco",
+    "name": "Blanco",
+    "description": "Éviers et robinetterie de qualité premium. Design et fonctionnalité.",
+    "logo": "/fournisseurs/blanco.png",
+    "website": "https://www.blanco.com",
+    "featured": true,
+    "order": 2
+  },
+  {
+    "id": "bosch",
+    "name": "Bosch",
+    "description": "Électroménager fiable et performant. Le meilleur rapport qualité-prix.",
+    "logo": "/fournisseurs/bosch.png",
+    "website": "https://www.bosch.fr",
+    "featured": true,
+    "order": 3
+  },
+  {
+    "id": "franke",
+    "name": "Franke",
+    "description": "Spécialiste suisse des éviers et systèmes de cuisine.",
+    "logo": "/fournisseurs/franke.png",
+    "website": "https://www.franke.com",
+    "featured": false,
+    "order": 4
+  },
+  {
+    "id": "neff",
+    "name": "Neff",
+    "description": "Électroménager premium avec des innovations exclusives.",
+    "logo": "/fournisseurs/neff.png",
+    "website": "https://www.neff.fr",
+    "featured": false,
+    "order": 5
+  }
+]

@@ -1,26 +1,76 @@
 @import "tailwindcss";
 
+@theme {
+  --color-abp-black: #1A1A1A;
+  --color-abp-white: #FDFBF7; /* Warm white/cream */
+  --color-abp-gray: #F5F5F0; /* Warm gray */
+  --color-abp-dark-gray: #4A4A4A;
+  --color-abp-gold: #C5A059; /* Softer gold */
+  --color-abp-primary: #111111; /* Elegant Black */
+  
+  --font-montserrat: var(--font-montserrat);
+  --font-playfair: var(--font-playfair);
+  --font-handwriting: var(--font-handwriting);
+}
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --background: #FDFBF7;
+  --foreground: #1A1A1A;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-montserrat), sans-serif;
+  overflow-x: hidden;
+}
+
+/* Titres avec style plus artisanal - moins rigide */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-montserrat), sans-serif;
+  letter-spacing: 0.02em;
+}
+
+/* Seulement pour certains éléments uppercase */
+.uppercase {
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.serif {
+  font-family: var(--font-playfair), serif;
+  text-transform: none;
+  letter-spacing: normal;
+}
+
+/* Style manuscrit pour les accroches */
+.font-handwriting {
+  font-family: var(--font-handwriting), cursive;
+  font-weight: normal;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Boutons arrondis plus chaleureux */
+.rounded-lg {
+  border-radius: 0.75rem;
+}
+
+/* Effet de survol plus doux */
+.hover-lift {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hover-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+}
+
+@keyframes shine {
+  to {
+    background-position: 200% center;
+  }
 }

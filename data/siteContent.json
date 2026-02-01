@@ -1,0 +1,441 @@
+{
+  "theme": {
+    "paletteId": "sage-stone"
+  },
+  "navbar": {
+    "logo": "",
+    "title": "La cuisine d'Arnaud",
+    "subtitle": "ABP Partner"
+  },
+  "hero": {
+    "title": "L'Art de la Cuisine",
+    "titleHighlight": "à Domicile",
+    "subtitle": "ABP Partner",
+    "description": "Conception sur mesure, expertise haut de gamme et tarifs justes. Transformez votre intérieur sans bouger de chez vous.",
+    "ctaPrimary": "Découvrir mes cuisines",
+    "ctaSecondary": "Prendre Rendez-vous",
+    "videoUrl": "",
+    "backgroundImage": "/hero/1769978870430-Capture_d__cran_2026-02-01___21.46.47.png"
+  },
+  "homepage": {
+    "sectionsOrder": [
+      {
+        "id": "cuisines",
+        "label": "Cuisines",
+        "enabled": true
+      },
+      {
+        "id": "realisations",
+        "label": "Réalisations",
+        "enabled": true
+      },
+      {
+        "id": "avis",
+        "label": "Avis Houzz",
+        "enabled": true
+      },
+      {
+        "id": "autresAmenagements",
+        "label": "Autres Aménagements",
+        "enabled": true
+      },
+      {
+        "id": "fournisseurs",
+        "label": "Fournisseurs",
+        "enabled": true
+      },
+      {
+        "id": "cta",
+        "label": "CTA Contact",
+        "enabled": true
+      }
+    ],
+    "cuisinesTeaser": {
+      "title": "Votre Cuisine",
+      "titleHighlight": "Sur Mesure",
+      "description": "Découvrez mon approche unique : conception à domicile, fabrication allemande premium et installation soignée.",
+      "features": [
+        {
+          "icon": "home",
+          "title": "À Domicile",
+          "description": "Nous venons chez vous pour concevoir votre projet"
+        },
+        {
+          "icon": "award",
+          "title": "Qualité Premium",
+          "description": "Fabrication allemande, garantie 25 ans"
+        },
+        {
+          "icon": "euro",
+          "title": "Prix Justes",
+          "description": "Tarifs transparents sans intermédiaire"
+        }
+      ],
+      "ctaText": "Explorer mes cuisines",
+      "image": "",
+      "image1": "/content/1769953823590-Capture_d__cran_2026-02-01___14.50.09.png",
+      "image2": "/content/1769953899915-Capture_d__cran_2026-02-01___14.51.27.png",
+      "image3": "/content/1769954023283-Capture_d__cran_2026-02-01___14.53.34.png"
+    },
+    "realisationsTeaser": {
+      "title": "Mes",
+      "titleHighlight": "Réalisations",
+      "description": "Découvrez une sélection de mes projets récents. Chaque réalisation est unique et témoigne de mon savoir-faire.",
+      "ctaText": "Voir toutes mes réalisations"
+    },
+    "autresAmenagementsTeaser": {
+      "title": "Au-delà de la cuisine",
+      "titleHighlight": "Aménagements",
+      "description": "Mon expertise s'étend à tous vos espaces de vie.",
+      "items": [
+        {
+          "title": "Salles de Bains",
+          "description": "Créez votre espace bien-être",
+          "image": "/content/1769954156405-unnamed.jpg",
+          "link": "/autres-amenagements/salles-de-bains"
+        },
+        {
+          "title": "Dressings",
+          "description": "Optimisez votre rangement",
+          "image": "/content/1769954384222-open-new-b-scaled-e1726152912470.jpg",
+          "link": "/autres-amenagements/dressings"
+        }
+      ]
+    },
+    "fournisseursTeaser": {
+      "title": "Mes",
+      "titleHighlight": "Partenaires",
+      "description": "Je travaille exclusivement avec les meilleures marques européennes pour vous garantir qualité et durabilité."
+    },
+    "avisSection": {
+      "title": "Ce que mes",
+      "titleHighlight": "Clients disent",
+      "description": "Découvrez les témoignages de mes clients satisfaits sur Houzz.",
+      "houzzProfileUrl": "https://www.houzz.fr/pro/abppartner",
+      "houzzProId": "abppartner",
+      "houzzHzid": "41538",
+      "showHouzzBadge": true,
+      "avis": [
+        {
+          "id": "1",
+          "author": "Client satisfait",
+          "rating": 5,
+          "text": "Un grand Merci à Arnaud pour son professionnalisme dans ses conseils, son choix de l'agencement de notre cuisine...",
+          "date": "2024-01-15",
+          "source": "Houzz"
+        },
+        {
+          "id": "2",
+          "author": "Studio Paris",
+          "rating": 5,
+          "text": "Nous avons partagé un projet de conception et d'installation de cuisine dans un studio dont j'avais la charge...",
+          "date": "2024-02-20",
+          "source": "Houzz"
+        },
+        {
+          "id": "3",
+          "author": "Marie D.",
+          "rating": 5,
+          "text": "Excellent professionnel, sympathique et à l'écoute, s'entoure d'équipes à son image. Cuisine dont je me félicite...",
+          "date": "2024-03-10",
+          "source": "Houzz"
+        }
+      ]
+    },
+    "ctaSection": {
+      "title": "Prêt à Transformer",
+      "titleHighlight": "Votre Intérieur ?",
+      "description": "Prenez rendez-vous pour une consultation gratuite à domicile. Je viens chez vous avec toutes les collections.",
+      "ctaText": "Demander un RDV gratuit",
+      "backgroundImage": "/cta-bg.jpg"
+    }
+  },
+  "cuisines": {
+    "title": "Expertise Cuisine",
+    "subtitle": "Mon Savoir-Faire",
+    "description": "Plus de 15 ans d'expérience dans la conception de cuisines sur mesure. Je vous accompagne de A à Z, de la première esquisse à la pose finale.",
+    "heroImage": "/cuisines-hero.jpg",
+    "expertise": [
+      {
+        "icon": "cube",
+        "title": "Conception 3D",
+        "description": "Visualisez votre future cuisine en 3D avant même le début des travaux."
+      },
+      {
+        "icon": "ruler",
+        "title": "Sur Mesure",
+        "description": "Chaque cuisine est unique, adaptée à vos besoins et votre espace."
+      },
+      {
+        "icon": "tools",
+        "title": "Installation Pro",
+        "description": "Pose par des artisans qualifiés avec garantie décennale."
+      }
+    ],
+    "styles": [
+      {
+        "name": "Contemporain",
+        "description": "Lignes épurées et matériaux nobles pour une cuisine moderne et fonctionnelle.",
+        "image": "/styles/contemporain.jpg"
+      },
+      {
+        "name": "Classique",
+        "description": "Élégance intemporelle et finitions raffinées pour les amateurs de tradition.",
+        "image": "/styles/classique.jpg"
+      },
+      {
+        "name": "Design",
+        "description": "Audace et innovation pour les amateurs de modernité et de créativité.",
+        "image": "/styles/design.jpg"
+      }
+    ],
+    "process": [
+      {
+        "step": 1,
+        "title": "Prise de contact",
+        "description": "Nous échangeons sur votre projet et prenons rendez-vous pour une visite à domicile."
+      },
+      {
+        "step": 2,
+        "title": "Conception",
+        "description": "Nous réalisons les plans 3D de votre future cuisine et vous présentons plusieurs options."
+      },
+      {
+        "step": 3,
+        "title": "Fabrication",
+        "description": "Votre cuisine est fabriquée sur mesure dans les ateliers de mes partenaires en Allemagne."
+      },
+      {
+        "step": 4,
+        "title": "Installation",
+        "description": "Pose professionnelle avec soin et précision par des artisans qualifiés."
+      }
+    ]
+  },
+  "autresAmenagements": {
+    "title": "Autres Aménagements",
+    "subtitle": "Votre Intérieur Sur Mesure",
+    "description": "Mon expertise va au-delà de la cuisine. Découvrez mes solutions pour tous vos espaces de vie.",
+    "categories": [
+      {
+        "id": "salles-de-bains",
+        "title": "Salles de Bains",
+        "description": "Créez votre espace bien-être avec des matériaux nobles et une conception sur mesure.",
+        "image": "/sdb-hero.jpg",
+        "features": [
+          "Douche italienne",
+          "Baignoire îlot",
+          "Double vasque",
+          "Rangements optimisés"
+        ]
+      },
+      {
+        "id": "dressings",
+        "title": "Dressings",
+        "description": "Optimisez votre rangement avec des solutions personnalisées et élégantes.",
+        "image": "/dressing-hero.jpg",
+        "features": [
+          "Sur mesure",
+          "Éclairage intégré",
+          "Accessoires premium",
+          "Finitions soignées"
+        ]
+      },
+      {
+        "id": "bureaux",
+        "title": "Bureaux",
+        "description": "Aménagez votre espace de travail avec style et fonctionnalité.",
+        "image": "/bureau-hero.jpg",
+        "features": [
+          "Ergonomie",
+          "Rangements",
+          "Connectique intégrée",
+          "Design personnalisé"
+        ]
+      }
+    ]
+  },
+  "pageContact": {
+    "headerAccroche": "Parlons-en",
+    "headerTitle": "Envie de discuter ?",
+    "headerDescription": "Appelez-moi, envoyez-moi un message ou remplissez le formulaire. Je vous rappelle rapidement pour échanger sur votre projet, sans engagement.",
+    "coordonneesTitle": "Mes Coordonnées",
+    "adresseLigne1": "13, rue de la ferme",
+    "adresseLigne2": "60530 Le Mesnil en Thelle",
+    "telephone": "+33 6 12 34 56 78",
+    "email": "contact@abp-partner.fr",
+    "horairesLigne1": "Lun - Ven : 9h00 - 18h00",
+    "horairesLigne2": "Sam : Sur rendez-vous",
+    "mapEmbedUrl": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2601.234!2d2.123!3d49.123!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNDnCsDA3JzIzLjAiTiAywrAwNyczMi4wIkU!5e0!3m2!1sfr!2sfr!4v1234567890",
+    "formTitle": "Envoyez-moi un message",
+    "typesProjet": [
+      "Cuisine sur mesure",
+      "Salle de bains",
+      "Dressing",
+      "Autre aménagement"
+    ],
+    "successTitle": "Message Envoyé !",
+    "successMessage": "Merci pour votre message. Je vous recontacterai dans les plus brefs délais.",
+    "successButtonText": "Envoyer un autre message",
+    "formDisclaimer": "En soumettant ce formulaire, vous acceptez notre politique de confidentialité."
+  },
+  "contact": {
+    "title": "Contactez-moi",
+    "subtitle": "Parlons de votre projet",
+    "description": "Je suis à votre écoute pour répondre à toutes vos questions et vous accompagner dans votre projet.",
+    "phone": "06 12 34 56 78",
+    "email": "contact@abp-partner.fr",
+    "address": "Le Mesnil-en-Thelle, Oise (60)",
+    "hours": "Du lundi au samedi, 9h-19h",
+    "mapUrl": "https://maps.google.com/?q=Le+Mesnil-en-Thelle"
+  },
+  "company": {
+    "name": "ABP Partner",
+    "tagline": "La cuisine d'Arnaud",
+    "description": "Cuisiniste à domicile depuis plus de 15 ans, je vous accompagne dans la conception et la réalisation de votre cuisine sur mesure.",
+    "founder": "Arnaud Bourak-Partouche",
+    "experience": "15+ ans",
+    "logo": "/logo.png"
+  },
+  "seo": {
+    "defaultTitle": "ABP Partner - Cuisiniste à Domicile",
+    "defaultDescription": "Cuisiniste à domicile dans l'Oise. Conception sur mesure, fabrication allemande premium, installation experte. Devis gratuit.",
+    "keywords": [
+      "cuisiniste",
+      "cuisine sur mesure",
+      "cuisiniste à domicile",
+      "Oise",
+      "Le Mesnil-en-Thelle"
+    ]
+  },
+  "footer": {
+    "brandName": "ABP Partner",
+    "tagline": "Cuisiniste à domicile & Conseil en aménagement.",
+    "adresseLigne1": "13, rue de la ferme",
+    "adresseLigne2": "60530 Le Mesnil en Thelle",
+    "rcsInfo": "RCS COMPIEGNE : 798 153 169",
+    "capitalInfo": "SAS au Capital de 5 000 Euros",
+    "socialLinks": {
+      "facebook": "",
+      "instagram": "",
+      "linkedin": "",
+      "houzz": "https://www.houzz.fr/pro/abppartner"
+    },
+    "mentionsLegalesHref": "/mentions-legales",
+    "politiqueConfidentialiteHref": "/politique-confidentialite",
+    "directeurPublication": "Arnaud Bourak-Partouche",
+    "copyrightText": "ABP Partner. All rights reserved.",
+    "designedBy": "Designed by ABP"
+  },
+  "pageSallesDeBains": {
+    "hero": {
+      "accroche": "Votre espace bien-être",
+      "titre": "Salles de Bains",
+      "sousTitre": "conçues pour vous",
+      "description": "Une salle de bains, c'est plus qu'une pièce fonctionnelle. C'est votre moment de détente le matin et le soir. Je la conçois pour qu'elle vous ressemble et vous apaise.",
+      "image": "/content/1769957230194-unnamed-2.jpg",
+      "boutonDevis": "Demander un devis",
+      "boutonRealisations": "Voir mes réalisations"
+    },
+    "features": {
+      "titre": "Ce que je maîtrise",
+      "description": "La salle de bains demande un savoir-faire particulier. Voici ce que je vous apporte.",
+      "items": [
+        {
+          "icon": "Bath",
+          "title": "Douches à l'italienne",
+          "description": "Design épuré et accès facilité. Receveurs extra-plats et parois sur mesure."
+        },
+        {
+          "icon": "Droplets",
+          "title": "Robinetterie Premium",
+          "description": "Marques reconnues et finitions haut de gamme. Chrome, noir mat, or brossé..."
+        },
+        {
+          "icon": "Sparkles",
+          "title": "Finitions Soignées",
+          "description": "Joints étanches, faïence posée avec précision, mobilier parfaitement ajusté."
+        },
+        {
+          "icon": "Shield",
+          "title": "Garantie Qualité",
+          "description": "Travaux garantis et assurance décennale. Votre sérénité est ma priorité."
+        }
+      ]
+    },
+    "services": {
+      "titre": "Mes Services",
+      "description": "Une prise en charge complète de votre projet, de la conception à la réalisation. Je coordonne tous les corps de métier pour un résultat impeccable.",
+      "items": [
+        "Conception 3D de votre salle de bains",
+        "Meubles vasques sur mesure",
+        "Douches et baignoires",
+        "Carrelage et faïence",
+        "Plomberie et raccordements",
+        "Éclairage et ventilation",
+        "Chauffage (sèche-serviettes)",
+        "Rangements optimisés"
+      ],
+      "image": "/content/1769957265226-meuble-de-salle-de-bain-en-noyer-massif-120-cm-senson-7631.avif"
+    }
+  },
+  "pageDressings": {
+    "hero": {
+      "accroche": "Rangement intelligent",
+      "titre": "Dressings",
+      "sousTitre": "pensés pour vous",
+      "description": "Un bon dressing, c'est celui où chaque vêtement a sa place et où vous trouvez tout en un clin d'œil. Je le conçois sur mesure, adapté à vos habitudes.",
+      "image": "/content/1769957332065-open-new-b-scaled-e1726152912470.jpg",
+      "boutonDevis": "Demander un devis",
+      "boutonRealisations": "Voir mes réalisations"
+    },
+    "features": {
+      "titre": "Les Avantages du Sur Mesure",
+      "description": "Un dressing parfaitement adapté à votre espace et vos habitudes.",
+      "items": [
+        {
+          "icon": "Maximize",
+          "title": "Optimisation Espace",
+          "description": "Chaque centimètre est exploité intelligemment pour maximiser votre capacité de rangement."
+        },
+        {
+          "icon": "Layers",
+          "title": "Modulabilité",
+          "description": "Systèmes évolutifs qui s'adaptent à vos besoins. Ajoutez ou modifiez des éléments facilement."
+        },
+        {
+          "icon": "Lightbulb",
+          "title": "Éclairage Intégré",
+          "description": "LED automatiques à l'ouverture des portes. Visibilité parfaite sur toute votre garde-robe."
+        },
+        {
+          "icon": "Shirt",
+          "title": "Accessoires",
+          "description": "Tiroirs à bijoux, porte-cravates, supports à chaussures... Tout pour une organisation parfaite."
+        }
+      ]
+    },
+    "configurations": {
+      "titre": "Configurations Possibles",
+      "description": "Quelle que soit la forme de votre espace, nous avons une solution.",
+      "items": [
+        {
+          "title": "Dressing d'angle",
+          "description": "Solution idéale pour exploiter les coins perdus et créer un espace de rangement généreux."
+        },
+        {
+          "title": "Dressing linéaire",
+          "description": "Configuration classique le long d'un mur. Parfait pour les chambres ou couloirs."
+        },
+        {
+          "title": "Dressing en U",
+          "description": "Pour les pièces dédiées. Maximum de rangement et circulation centrale."
+        },
+        {
+          "title": "Dressing sous pente",
+          "description": "Exploitation optimale des combles et espaces atypiques."
+        }
+      ]
+    }
+  }
+}

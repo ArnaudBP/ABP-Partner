@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ABP Partner - Cuisiniste Haut de Gamme à Domicile</title>
+    <meta name="description" content="Cuisiniste à domicile haut de gamme en Île-de-France. Conception sur mesure, expertise professionnelle, et tarifs compétitifs sans frais de magasin.">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- AOS Animation Library -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'abp-gold': '#D4AF37',
+                        'abp-dark': '#1a1a1a',
+                        'abp-charcoal': '#2d2d2d',
+                        'abp-light': '#f4f4f4',
+                    },
+                    fontFamily: {
+                        serif: ['"Playfair Display"', 'serif'],
+                        sans: ['"Montserrat"', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .hero-bg {
+            background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-4.0.3&auto=format&fit=crop&w=2053&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+        .glass-nav {
+            background: rgba(26, 26, 26, 0.9);
+            backdrop-filter: blur(10px);
+        }
+        .text-shadow {
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+    </style>
+</head>
+<body class="bg-abp-dark text-gray-300 font-sans antialiased">
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 transition-all duration-300 glass-nav border-b border-gray-800" id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <div class="flex-shrink-0 flex items-center">
+                    <a href="#" class="text-2xl font-serif font-bold text-white tracking-wider">
+                        <span class="text-abp-gold">ABP</span> Partner
+                    </a>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-8">
+                        <a href="#home" class="hover:text-abp-gold px-3 py-2 rounded-md text-sm font-medium transition-colors">Accueil</a>
+                        <a href="#concept" class="hover:text-abp-gold px-3 py-2 rounded-md text-sm font-medium transition-colors">Le Concept</a>
+                        <a href="#process" class="hover:text-abp-gold px-3 py-2 rounded-md text-sm font-medium transition-colors">Votre Projet</a>
+                        <a href="#portfolio" class="hover:text-abp-gold px-3 py-2 rounded-md text-sm font-medium transition-colors">Réalisations</a>
+                        <a href="#conseil" class="hover:text-abp-gold px-3 py-2 rounded-md text-sm font-medium transition-colors">Conseil</a>
+                        <a href="#contact" class="bg-abp-gold text-abp-dark hover:bg-white px-4 py-2 rounded-sm text-sm font-bold transition-colors">Contact</a>
+                    </div>
+                </div>
+                <!-- Mobile menu button -->
+                <div class="-mr-2 flex md:hidden">
+                    <button type="button" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none" aria-controls="mobile-menu" aria-expanded="false" id="mobile-menu-btn">
+                        <span class="sr-only">Open main menu</span>
+                        <svg class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div class="md:hidden hidden bg-abp-dark" id="mobile-menu">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="#home" class="text-gray-300 hover:text-abp-gold block px-3 py-2 rounded-md text-base font-medium">Accueil</a>
+                <a href="#concept" class="text-gray-300 hover:text-abp-gold block px-3 py-2 rounded-md text-base font-medium">Le Concept</a>
+                <a href="#process" class="text-gray-300 hover:text-abp-gold block px-3 py-2 rounded-md text-base font-medium">Votre Projet</a>
+                <a href="#portfolio" class="text-gray-300 hover:text-abp-gold block px-3 py-2 rounded-md text-base font-medium">Réalisations</a>
+                <a href="#conseil" class="text-gray-300 hover:text-abp-gold block px-3 py-2 rounded-md text-base font-medium">Conseil</a>
+                <a href="#contact" class="text-abp-gold block px-3 py-2 rounded-md text-base font-medium">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero-bg h-screen flex items-center justify-center relative">
+        <div class="text-center px-4" data-aos="fade-up" data-aos-duration="1000">
+            <h1 class="text-5xl md:text-7xl font-serif font-bold text-white mb-6 text-shadow">
+                L'Art de la Cuisine <br><span class="text-abp-gold italic">à Domicile</span>
+            </h1>
+            <p class="text-xl md:text-2xl text-gray-200 mb-10 max-w-3xl mx-auto font-light">
+                Conception sur mesure, expertise haut de gamme et tarifs justes. <br>
+                Transformez votre intérieur sans bouger de chez vous.
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <a href="#concept" class="px-8 py-4 border-2 border-abp-gold text-abp-gold hover:bg-abp-gold hover:text-abp-dark transition-all duration-300 uppercase tracking-widest text-sm font-bold">
+                    Découvrir le concept
+                </a>
+                <a href="#contact" class="px-8 py-4 bg-white text-abp-dark hover:bg-gray-200 transition-all duration-300 uppercase tracking-widest text-sm font-bold">
+                    Prendre Rendez-vous
+                </a>
+            </div>
+        </div>
+        <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce">
+            <a href="#concept" class="text-white opacity-70 hover:opacity-100">
+                <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
+            </a>
+        </div>
+    </section>
+
+    <!-- Concept Section -->
+    <section id="concept" class="py-24 bg-abp-dark">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16" data-aos="fade-up">
+                <h2 class="text-abp-gold text-sm font-bold tracking-widest uppercase mb-2">Pourquoi nous choisir ?</h2>
+                <h3 class="text-4xl font-serif text-white">Le Cuisiniste à Domicile</h3>
+                <div class="w-24 h-1 bg-abp-gold mx-auto mt-6"></div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Feature 1 -->
+                <div class="bg-abp-charcoal p-8 rounded-lg hover:transform hover:-translate-y-2 transition-all duration-300 border border-gray-800 hover:border-abp-gold group" data-aos="fade-up" data-aos-delay="100">
+                    <div class="text-abp-gold mb-4 text-4xl group-hover:scale-110 transition-transform duration-300">
+                        <i class="fas fa-home"></i> <!-- Icon placeholder -->
+                        <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+                    </div>
+                    <h4 class="text-xl font-bold text-white mb-3">Sur Mesure Réel</h4>
+                    <p class="text-gray-400 text-sm leading-relaxed">
+                        Une cuisine d'exposition n'est jamais celle dont vous avez besoin. En venant chez vous, nous intégrons immédiatement vos contraintes d'espace et de lumière.
+                    </p>
+                </div>
+
+                <!-- Feature 2 -->
+                <div class="bg-abp-charcoal p-8 rounded-lg hover:transform hover:-translate-y-2 transition-all duration-300 border border-gray-800 hover:border-abp-gold group" data-aos="fade-up" data-aos-delay="200">
+                    <div class="text-abp-gold mb-4 text-4xl group-hover:scale-110 transition-transform duration-300">
+                        <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    </div>
+                    <h4 class="text-xl font-bold text-white mb-3">Coûts Optimisés</h4>
+                    <p class="text-gray-400 text-sm leading-relaxed">
+                        En nous affranchissant des frais d'un magasin physique, nous répercutons cette économie directement sur votre facture pour un rapport qualité/prix imbattable.
+                    </p>
+                </div>
+
+                <!-- Feature 3 -->
+                <div class="bg-abp-charcoal p-8 rounded-lg hover:transform hover:-translate-y-2 transition-all duration-300 border border-gray-800 hover:border-abp-gold group" data-aos="fade-up" data-aos-delay="300">
+                    <div class="text-abp-gold mb-4 text-4xl group-hover:scale-110 transition-transform duration-300">
+                        <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                    </div>
+                    <h4 class="text-xl font-bold text-white mb-3">Visualisation 3D</h4>
+                    <p class="text-gray-400 text-sm leading-relaxed">
+                        Grâce aux meilleurs logiciels de conception, visualisez, modifiez et validez votre future cuisine avant même le début des travaux.
+                    </p>
+                </div>
+
+                <!-- Feature 4 -->
+                <div class="bg-abp-charcoal p-8 rounded-lg hover:transform hover:-translate-y-2 transition-all duration-300 border border-gray-800 hover:border-abp-gold group" data-aos="fade-up" data-aos-delay="400">
+                    <div class="text-abp-gold mb-4 text-4xl group-hover:scale-110 transition-transform duration-300">
+                        <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    </div>
+                    <h4 class="text-xl font-bold text-white mb-3">Style de Vie</h4>
+                    <p class="text-gray-400 text-sm leading-relaxed">
+                        Nous analysons votre façon de vivre pour créer une cuisine qui s'adapte à vous, et non l'inverse. Matériaux, couleurs, ergonomie : tout est pensé pour vous.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Process Section -->
+    <section id="process" class="py-24 bg-gray-900 relative overflow-hidden">
+        <!-- Decorative background element -->
+        <div class="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 bg-abp-gold opacity-5 rounded-full blur-3xl"></div>
+        
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                <div data-aos="fade-right">
+                    <h2 class="text-abp-gold text-sm font-bold tracking-widest uppercase mb-2">Votre Projet</h2>
+                    <h3 class="text-4xl font-serif text-white mb-8">De l'Idée à la Réalité</h3>
+                    
+                    <div class="space-y-8">
+                        <div class="flex">
+                            <div class="flex-shrink-0 h-12 w-12 rounded-full bg-abp-gold flex items-center justify-center text-abp-dark font-bold text-xl">1</div>
+                            <div class="ml-6">
+                                <h4 class="text-xl font-bold text-white">Définition & Écoute</h4>
+                                <p class="text-gray-400 mt-2">Nous définissons ensemble vos besoins en tenant compte de votre budget, de l'espace et de vos désirs.</p>
+                            </div>
+                        </div>
+                        <div class="flex">
+                            <div class="flex-shrink-0 h-12 w-12 rounded-full border-2 border-abp-gold flex items-center justify-center text-abp-gold font-bold text-xl">2</div>
+                            <div class="ml-6">
+                                <h4 class="text-xl font-bold text-white">Conception & 3D</h4>
+                                <p class="text-gray-400 mt-2">Ébauches, crayonnés puis modélisation 3D photoréaliste pour valider chaque détail de votre future cuisine.</p>
+                            </div>
+                        </div>
+                        <div class="flex">
+                            <div class="flex-shrink-0 h-12 w-12 rounded-full border-2 border-abp-gold flex items-center justify-center text-abp-gold font-bold text-xl">3</div>
+                            <div class="ml-6">
+                                <h4 class="text-xl font-bold text-white">Fabrication Allemande</h4>
+                                <p class="text-gray-400 mt-2">Vos meubles sont fabriqués sur mesure par nos partenaires allemands, gage de robustesse et de finition impeccable.</p>
+                            </div>
+                        </div>
+                        <div class="flex">
+                            <div class="flex-shrink-0 h-12 w-12 rounded-full border-2 border-abp-gold flex items-center justify-center text-abp-gold font-bold text-xl">4</div>
+                            <div class="ml-6">
+                                <h4 class="text-xl font-bold text-white">Installation Expert</h4>
+                                <p class="text-gray-400 mt-2">Pose réalisée par des professionnels qualifiés. Livraison "Casseroles en main".</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="relative" data-aos="fade-left">
+                    <img src="https://images.unsplash.com/photo-1556911220-e15b29be8c8f?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80" alt="Cuisine Moderne" class="rounded-lg shadow-2xl border border-gray-700">
+                    <div class="absolute -bottom-6 -left-6 bg-abp-gold p-6 rounded-lg shadow-xl hidden md:block">
+                        <p class="text-abp-dark font-bold text-lg">3000+</p>
+                        <p class="text-abp-dark text-sm">Combinaisons de couleurs</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Portfolio Section -->
+    <section id="portfolio" class="py-24 bg-abp-dark">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16" data-aos="fade-up">
+                <h2 class="text-abp-gold text-sm font-bold tracking-widest uppercase mb-2">Nos Réalisations</h2>
+                <h3 class="text-4xl font-serif text-white">L'Excellence en Images</h3>
+                <div class="w-24 h-1 bg-abp-gold mx-auto mt-6"></div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Project 1 -->
+                <div class="group relative overflow-hidden rounded-lg cursor-pointer" data-aos="zoom-in">
+                    <img src="https://images.unsplash.com/photo-1565538810643-b5bdb714032a?ixlib=rb-4.0.3&auto=format&fit=crop&w=987&q=80" alt="Cuisine Casher" class="w-full h-80 object-cover transition-transform duration-500 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-black bg-opacity-60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-center items-center text-center p-4">
+                        <h4 class="text-2xl font-serif text-white mb-2">Cuisine Casher</h4>
+                        <p class="text-gray-300 text-sm">Double évier, double lave-vaisselle, élégance et respect des traditions.</p>
+                    </div>
+                </div>
+
+                <!-- Project 2 -->
+                <div class="group relative overflow-hidden rounded-lg cursor-pointer" data-aos="zoom-in" data-aos-delay="100">
+                    <img src="https://images.unsplash.com/photo-1507089947368-19c1da9775ae?ixlib=rb-4.0.3&auto=format&fit=crop&w=2076&q=80" alt="Optimisation Espace" class="w-full h-80 object-cover transition-transform duration-500 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-black bg-opacity-60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-center items-center text-center p-4">
+                        <h4 class="text-2xl font-serif text-white mb-2">Optimisation Locative</h4>
+                        <p class="text-gray-300 text-sm">Fonctionnalité maximale et durabilité pour un investissement locatif.</p>
+                    </div>
+                </div>
+
+                <!-- Project 3 -->
+                <div class="group relative overflow-hidden rounded-lg cursor-pointer" data-aos="zoom-in" data-aos-delay="200">
+                    <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80" alt="Lumière Artificielle" class="w-full h-80 object-cover transition-transform duration-500 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-black bg-opacity-60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-center items-center text-center p-4">
+                        <h4 class="text-2xl font-serif text-white mb-2">Défi Lumière</h4>
+                        <p class="text-gray-300 text-sm">Transformation d'une pièce sans fenêtre grâce aux Power LED et surfaces laquées.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-12">
+                <a href="#contact" class="inline-block border border-white text-white px-8 py-3 hover:bg-white hover:text-abp-dark transition-colors duration-300 uppercase tracking-wider text-sm">Voir plus de projets</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Conseil Section -->
+    <section id="conseil" class="py-24 bg-gray-900">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="bg-abp-charcoal rounded-2xl p-8 md:p-12 shadow-2xl border border-gray-800 flex flex-col md:flex-row items-center gap-12" data-aos="fade-up">
+                <div class="md:w-1/2">
+                    <h2 class="text-abp-gold text-sm font-bold tracking-widest uppercase mb-2">ABP Conseil</h2>
+                    <h3 class="text-3xl font-serif text-white mb-6">Expertise pour les Professionnels</h3>
+                    <p class="text-gray-400 mb-6 leading-relaxed">
+                        Au-delà de la conception de cuisines, ABP Partner offre son expertise aux entreprises de l'industrie du meuble modulaire.
+                    </p>
+                    <ul class="space-y-3 text-gray-300 mb-8">
+                        <li class="flex items-start"><span class="text-abp-gold mr-2">✓</span> Planification et conception de systèmes informatiques</li>
+                        <li class="flex items-start"><span class="text-abp-gold mr-2">✓</span> Formation des équipes et amélioration des performances</li>
+                        <li class="flex items-start"><span class="text-abp-gold mr-2">✓</span> Conseil en développement logiciel personnalisé</li>
+                    </ul>
+                    <a href="#contact" class="text-abp-gold font-bold hover:text-white transition-colors">En savoir plus &rarr;</a>
+                </div>
+                <div class="md:w-1/2">
+                    <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80" alt="Consulting" class="rounded-lg shadow-lg grayscale hover:grayscale-0 transition-all duration-500">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-24 bg-abp-dark relative">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div data-aos="fade-up">
+                <h2 class="text-abp-gold text-sm font-bold tracking-widest uppercase mb-2">Contactez-nous</h2>
+                <h3 class="text-4xl font-serif text-white mb-8">Réalisons votre Rêve</h3>
+                <p class="text-gray-400 mb-12">
+                    Prêt à transformer votre intérieur ? Contactez Arnaud Bourak-Partouche pour un devis gratuit à domicile.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                <div class="bg-gray-800 p-8 rounded-lg text-center hover:bg-gray-700 transition-colors" data-aos="fade-right">
+                    <div class="text-abp-gold text-3xl mb-4"><i class="fas fa-phone"></i> &#9742;</div>
+                    <h4 class="text-white font-bold mb-2">Téléphone</h4>
+                    <p class="text-gray-300 text-xl">06 52 07 47 24</p>
+                </div>
+                <div class="bg-gray-800 p-8 rounded-lg text-center hover:bg-gray-700 transition-colors" data-aos="fade-left">
+                    <div class="text-abp-gold text-3xl mb-4"><i class="fas fa-envelope"></i> &#9993;</div>
+                    <h4 class="text-white font-bold mb-2">Email</h4>
+                    <p class="text-gray-300 text-xl">contact@abp-partner.fr</p>
+                </div>
+            </div>
+
+            <a href="https://www.abp-partner.fr/contact.html" class="inline-block bg-abp-gold text-abp-dark font-bold py-4 px-10 rounded hover:bg-white transition-all duration-300 shadow-lg hover:shadow-abp-gold/50">
+                Formulaire de Contact
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-black py-12 border-t border-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center">
+            <div class="mb-6 md:mb-0">
+                <span class="text-2xl font-serif font-bold text-white tracking-wider">
+                    <span class="text-abp-gold">ABP</span> Partner
+                </span>
+                <p class="text-gray-500 text-sm mt-2">La cuisine d'Arnaud</p>
+            </div>
+            <div class="flex space-x-6 mb-6 md:mb-0">
+                <a href="#" class="text-gray-400 hover:text-abp-gold transition-colors">Accueil</a>
+                <a href="mentions-legales.html" class="text-gray-400 hover:text-abp-gold transition-colors">Mentions Légales</a>
+            </div>
+            <div class="text-gray-500 text-sm">
+                &copy; 2025 ABP Partner. Tous droits réservés.
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        // Initialize AOS Animation
+        AOS.init({
+            once: true,
+            offset: 100,
+            duration: 800,
+        });
+
+        // Mobile Menu Toggle
+        const btn = document.getElementById('mobile-menu-btn');
+        const menu = document.getElementById('mobile-menu');
+
+        btn.addEventListener('click', () => {
+            menu.classList.toggle('hidden');
+        });
+
+        // Navbar Scroll Effect
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('shadow-lg');
+                navbar.classList.replace('glass-nav', 'bg-abp-dark');
+            } else {
+                navbar.classList.remove('shadow-lg');
+                navbar.classList.replace('bg-abp-dark', 'glass-nav');
+            }
+        });
+    </script>
+</body>
+</html>

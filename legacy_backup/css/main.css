@@ -1,0 +1,225 @@
+/* main.css */
+#myCarousel h1{
+    color: #c40054;    
+}
+#myCarousel h1.captiondroite{
+position:absolute;
+top:0;
+right:0.5em;
+}
+.maincontainer{
+    margin-top:50px;
+}
+.container-fluid.accueil{
+background-color:#444;
+}
+
+.navbar .glyphicon-envelope{
+margin-right:1em;
+}
+
+.navbar .navbar-brand {
+    width:12em;
+}
+.navbar .navbar-brand .carreviolet{
+    height:20px;
+    width:20px;
+    background:#c40054;
+    float:left;
+    margin:15px;
+}
+.navbar .navbar-brand .texteabp{
+    line-height:50px;
+}
+.navbar span.abpbold {
+    color:#fff;
+    font-weight:bold;
+    font-size:1.2em;
+}
+
+
+
+.titremobile{
+  color:#fff;
+}
+.accueilbtplus{
+    text-align:center;
+}
+
+.samplestop {
+    margin-top:20px;
+    background:#ddd;
+}
+.samplesref p, .samplesref li{
+    font-size:1.1em;
+    color:#666;
+}
+.samplesref img{
+padding:0;
+margin:10px;
+-moz-box-shadow: 5px 5px 20px 1px #9b9b9b;
+-webkit-box-shadow: 5px 5px 20px 1px #9b9b9b;
+-o-box-shadow: 5px 5px 20px 1px #9b9b9b;
+box-shadow: 5px 5px 20px 1px #9b9b9b;
+filter:progid:DXImageTransform.Microsoft.Shadow(color=#9b9b9b, Direction=134, Strength=20);
+}
+.samplesref .explic{
+    padding-left:20px;
+}
+.txtconseil{
+    font-size:1.2em;
+    color:#666;
+}
+.txtconseil ul {
+    list-style: none;
+    padding:0;
+    margin:0;
+}
+
+.txtconseil li { 
+    padding-left: 2em; 
+    text-indent: -1.5em;
+    
+}
+.txtconseil li:before {
+    content: '\0025a0\0000a0\0000a0\0000a0';
+    color: #c40054;
+}
+.carrebordeau{
+    width:60px;
+    height:60px;
+    background-color: #c40054;
+    display:inline-block;
+    margin-right:0.2em;
+}
+.jumbotron.conseil h1 span{
+    letter-spacing:-0.08em;
+}
+.jumbotron.conseil h1 small{
+    font-size:0.6em;
+}
+.iconscontact{
+    font-size:4em;
+}
+
+
+.iconscontact  .arobase{
+   display:block;
+   float:left;
+   margin-top:-.2em;
+   margin-right:.2em;
+   
+    color:#d70012;
+}
+.iconscontact .glyphicon-phone{
+    color:#fead16;
+}
+.iconscontact .glyphicon-phone-alt{
+    color:#0088f1;
+}
+.iconscontact .glyphicon-envelope{
+    color:#74de00;
+}
+.infosleft {
+    margin-top:2em;
+}
+.infosright {
+    margin-top:1em;
+}
+.carousel-caption.titre {
+    max-width: 750px;
+    padding: 0 20px;
+    margin:0 auto;
+    top:0px;
+    margin-top: 0;
+    text-align:center;
+}
+.btn-xlarge {
+    padding: 18px 28px;
+    font-size: 22px; //change this to your desired size
+    line-height: normal;
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    border-radius: 8px;
+}
+#myCarousel .btn-lg{
+/*margin-left:70%;   */
+
+}
+a.navbar-brand{
+    margin:0;
+    padding-top:0;
+}
+a.navbar-brand img{
+    height:50px; 
+    width:227px;
+}
+
+#alphalog{
+    font-size:0.8em;
+}
+.h-card span{
+    display:block;
+}
+.h-card .p-job-title{
+    display:none;
+}
+.h-card .adresse span{
+    display:inline;
+}
+.h-card .glyphicon-earphone{
+    display:inline;
+}
+
+.cnt-slide {
+    position:relative;
+}
+
+.cnt-slide img{
+    width:100%;
+    position:absolute;
+    top:0;
+    left:0;
+    
+}
+.cnt-slide img.invisible{
+    visibility:hidden;
+}
+
+.cnt-slide.projet{
+    height:200%;
+}
+
+ul.resumepage li{
+    margin-bottom:4px;
+}
+span.lettrine{
+    font-size:1.2em;
+    font-weight:bold;
+    
+}
+.txterror , .txtsent{
+    font-size : 0.9em;
+    background-color: #fcf8f2;
+    border-left: 3px solid #fcc;
+    border-color: #d9534f;
+    margin-top: 20px;
+    margin-left:20px;
+    margin-bottom: 20px;
+    
+    padding: 20px;
+}
+.txterror h4{
+color: #d9534f;
+}
+.txtsent {
+    background-color:#e1e7ff;
+    border-color: #3756d6;   
+}
+.txtsent h4{
+    color: #3756d6;
+}
+.ctctsep{
+    height:3em;
+    clear:both;
+}

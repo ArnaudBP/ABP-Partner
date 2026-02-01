@@ -1,0 +1,108 @@
+[
+  {
+    "id": "cuisine-casher-elegance",
+    "slug": "cuisine-casher-elegance",
+    "title": "Cuisine Casher",
+    "subtitle": "Élégance et Respect des Traditions",
+    "category": "cuisine",
+    "style": "contemporain",
+    "description": "Ici, plusieurs impératifs ! Il a fallu être un cuisiniste casher. C'est une grande pièce où nous avons proposé une grande table repas pour 6 personnes, 2 éviers, 2 lave-vaisselles, une grande plaque à induction, une hotte efficace mais discrète. Elle doit être élégante et discrète pour ne pas donner l'impression de passer sa vie dans la cuisine.",
+    "details": [
+      "2 éviers et 2 lave-vaisselles (Cacheroute)",
+      "Lave-vaisselle Full intégrable",
+      "Réfrigérateur > 300L et congélateur intégrés",
+      "Table modulable 6-8 personnes"
+    ],
+    "images": [
+      "/cuisine1.png"
+    ],
+    "featured": true,
+    "createdAt": "2024-01-15",
+    "order": 4
+  },
+  {
+    "id": "optimisation-locative",
+    "slug": "optimisation-locative",
+    "title": "Optimisation Locative",
+    "subtitle": "Fonctionnalité et Durabilité",
+    "category": "cuisine",
+    "style": "moderne",
+    "description": "Dans cette cuisine, la propriétaire souhaite proposer une prestation de qualité pour la location de son appartement et ainsi limiter la dégradation de son bien. Nous avons prévu une cuisine fonctionnelle et complète avec des protections spécifiques.",
+    "details": [
+      "Lave-vaisselle intégrable",
+      "Optimisation des rangements (Elément d'angle)",
+      "Grands tiroirs sous four et cuisson",
+      "Crédence inox de protection"
+    ],
+    "images": [
+      "/cuisine2.png"
+    ],
+    "featured": false,
+    "createdAt": "2024-02-20",
+    "order": 3
+  },
+  {
+    "id": "defi-lumiere",
+    "slug": "defi-lumiere",
+    "title": "Défi Lumière",
+    "subtitle": "Transformation d'une pièce aveugle",
+    "category": "cuisine",
+    "style": "design",
+    "description": "Une petite pièce sans fenêtre dans un rez-de-villa en rénovation. La solution a été de créer un puits de lumière artificielle avec des dalles en Power LED. Pour renforcer la lumière, nous avons utilisé une crédence en verre laqué avec également des Power LED à l'arrière.",
+    "details": [
+      "Puits de lumière artificielle Power LED",
+      "Crédence verre laqué rétro-éclairée",
+      "Éléments hauts Lack Laminat haute brillance",
+      "Optimisation de l'espace restreint"
+    ],
+    "images": [
+      "/cuisine3.png"
+    ],
+    "featured": false,
+    "createdAt": "2024-03-10",
+    "order": 2
+  },
+  {
+    "id": "salle-bain-spa",
+    "slug": "salle-bain-spa",
+    "title": "Salle de Bain Spa",
+    "subtitle": "Un havre de paix",
+    "category": "salle-de-bains",
+    "style": "contemporain",
+    "description": "Transformation d'une salle de bain classique en espace bien-être avec douche à l'italienne, double vasque et rangements optimisés.",
+    "details": [
+      "Douche à l'italienne XXL",
+      "Double vasque sur mesure",
+      "Meuble suspendu avec éclairage LED",
+      "Carrelage grand format"
+    ],
+    "images": [
+      "/sdb1.png"
+    ],
+    "featured": false,
+    "createdAt": "2024-04-05",
+    "order": 0
+  },
+  {
+    "id": "dressing-suite-parentale",
+    "slug": "dressing-suite-parentale",
+    "title": "Dressing Suite Parentale",
+    "subtitle": "Organisation et élégance",
+    "category": "dressing",
+    "style": "classique",
+    "description": "Un dressing sur mesure intégré dans une suite parentale, maximisant chaque centimètre d'espace disponible.",
+    "details": [
+      "Penderies doubles hauteur",
+      "Tiroirs à compartiments",
+      "Éclairage automatique",
+      "Miroir intégré"
+    ],
+    "images": [
+      "/dressing1.png"
+    ],
+    "featured": false,
+    "createdAt": "2024-05-12",
+    "lien3D": "https://live.cscloudservices.online/WinnerCloud/cloud/ccs/?token=1AE1C90D-E7AE-4717-B556-6181D37D4A04&ts=1769957367067&vs=1769957367067#planung",
+    "order": 1
+  }
+]

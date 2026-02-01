@@ -1,36 +1,34 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ABP Partner - Next.js Version
 
-## Getting Started
+Ce projet a été refait à neuf avec **Next.js 15**, **Tailwind CSS v4** et **Framer Motion** pour des animations fluides et un design ultra-moderne.
 
-First, run the development server:
+## 🚀 Démarrage
+
+Pour lancer le serveur de développement :
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Ouvrez [http://localhost:3000](http://localhost:3000) dans votre navigateur.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🎨 Design System
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- **Couleurs :**
+  - Or : `#D4AF37` (Luxe)
+  - Noir Profond : `#1a1a1a` (Background)
+  - Charbon : `#2d2d2d` (Cartes)
+- **Polices :**
+  - Titres : *Playfair Display* (Sérif, élégant)
+  - Textes : *Montserrat* (Sans-serif, moderne)
 
-## Learn More
+## 📸 Images
 
-To learn more about Next.js, take a look at the following resources:
+Les images actuelles proviennent d'Unsplash. Pour un rendu final "truc de fou", générez vos propres images avec Midjourney en utilisant les prompts fournis dans le fichier `midjourney_prompts.txt`.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🛠 Technologies
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- [Next.js](https://nextjs.org/)
+- [Tailwind CSS](https://tailwindcss.com/)
+- [Framer Motion](https://www.framer.com/motion/) (Animations)
+- [Lucide React](https://lucide.dev/) (Icônes)
