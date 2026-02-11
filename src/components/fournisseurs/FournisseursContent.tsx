@@ -52,7 +52,7 @@ function DownloadButton({ url, year }: { url: string; year?: number }) {
       }
 
       // Créer le blob et télécharger
-      const blob = new Blob(chunks, { type: 'application/pdf' });
+      const blob = new Blob(chunks as BlobPart[], { type: 'application/pdf' });
       const downloadUrl = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = downloadUrl;

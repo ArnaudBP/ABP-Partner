@@ -2,15 +2,6 @@ import { NextRequest, NextResponse } from 'next/server';
 import { isAuthenticated } from '@/lib/auth';
 import { uploadFile } from '@/lib/storage';
 
-// Augmenter la limite de taille pour cette route (100 Mo)
-export const config = {
-  api: {
-    bodyParser: {
-      sizeLimit: '100mb',
-    },
-  },
-};
-
 export async function POST(request: NextRequest) {
   try {
     const authenticated = await isAuthenticated();
