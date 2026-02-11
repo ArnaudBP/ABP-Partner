@@ -340,7 +340,8 @@ function ImageField({ label, value, onChange, hint }: {
 
 // Theme Editor
 function ThemeEditor({ content, onChange }: { content: Record<string, unknown>; onChange: (val: Record<string, unknown>) => void }) {
-  const currentPaletteId = (content?.paletteId as string) || 'classic-gold';
+  const data = content || {};
+  const currentPaletteId = (data.paletteId as string) || 'classic-gold';
   const currentPalette = COLOR_PALETTES.find(p => p.id === currentPaletteId);
 
   return (
@@ -355,7 +356,7 @@ function ThemeEditor({ content, onChange }: { content: Record<string, unknown>; 
           {COLOR_PALETTES.map((palette) => (
             <button
               key={palette.id}
-              onClick={() => onChange({ ...content, paletteId: palette.id })}
+              onClick={() => onChange({ ...data, paletteId: palette.id })}
               className={`relative p-4 rounded-xl border-2 transition-all hover:scale-102 ${
                 currentPaletteId === palette.id
                   ? 'border-blue-500 shadow-lg ring-2 ring-blue-200'
@@ -511,7 +512,8 @@ function HeaderEditor({ content, onChange }: { content: Record<string, unknown>;
 
 // Hero Editor
 function HeroEditor({ content, onChange }: { content: Record<string, unknown>; onChange: (val: Record<string, unknown>) => void }) {
-  const update = (key: string, value: unknown) => onChange({ ...content, [key]: value });
+  const data = content || {};
+  const update = (key: string, value: unknown) => onChange({ ...data, [key]: value });
 
   return (
     <div className="space-y-8">
@@ -526,13 +528,13 @@ function HeroEditor({ content, onChange }: { content: Record<string, unknown>; o
           <div className="grid grid-cols-2 gap-4">
             <InputField
               label="Titre (ligne 1)"
-              value={content.title as string}
+              value={data.title as string}
               onChange={(val) => update('title', val)}
               hint="Ex: L'Art de la Cuisine"
             />
             <InputField
               label="Titre coloré (ligne 2)"
-              value={content.titleHighlight as string}
+              value={data.titleHighlight as string}
               onChange={(val) => update('titleHighlight', val)}
               hint="Texte en couleur accent"
             />
@@ -540,14 +542,14 @@ function HeroEditor({ content, onChange }: { content: Record<string, unknown>; o
           
           <InputField
             label="Sous-titre"
-            value={content.subtitle as string}
+            value={data.subtitle as string}
             onChange={(val) => update('subtitle', val)}
             hint="Apparaît au-dessus du titre"
           />
           
           <TextareaField
             label="Description"
-            value={content.description as string}
+            value={data.description as string}
             onChange={(val) => update('description', val)}
             hint="Texte descriptif sous le titre"
           />
@@ -555,12 +557,12 @@ function HeroEditor({ content, onChange }: { content: Record<string, unknown>; o
           <div className="grid grid-cols-2 gap-4">
             <InputField
               label="Bouton principal"
-              value={content.ctaPrimary as string}
+              value={data.ctaPrimary as string}
               onChange={(val) => update('ctaPrimary', val)}
             />
             <InputField
               label="Bouton secondaire"
-              value={content.ctaSecondary as string}
+              value={data.ctaSecondary as string}
               onChange={(val) => update('ctaSecondary', val)}
             />
           </div>
@@ -582,11 +584,11 @@ function HeroEditor({ content, onChange }: { content: Record<string, unknown>; o
                 folder="hero"
                 accept="video/*"
                 label="Uploader une vidéo"
-                currentFile={content.videoUrl as string}
+                currentFile={data.videoUrl as string}
               />
-              {typeof content.videoUrl === 'string' && content.videoUrl && (
+              {typeof data.videoUrl === 'string' && data.videoUrl && (
                 <div className="mt-3 aspect-video bg-black rounded-lg overflow-hidden">
-                  <video src={content.videoUrl} className="w-full h-full object-cover" muted loop autoPlay />
+                  <video src={data.videoUrl} className="w-full h-full object-cover" muted loop autoPlay />
                 </div>
               )}
             </div>
@@ -599,7 +601,7 @@ function HeroEditor({ content, onChange }: { content: Record<string, unknown>; o
                 folder="hero"
                 accept="image/*"
                 label="Uploader une image"
-                currentFile={content.backgroundImage as string}
+                currentFile={data.backgroundImage as string}
               />
             </div>
           </div>
@@ -611,8 +613,9 @@ function HeroEditor({ content, onChange }: { content: Record<string, unknown>; o
 
 // Cuisines Teaser Editor
 function CuisinesTeaserEditor({ content, onChange }: { content: Record<string, unknown>; onChange: (val: Record<string, unknown>) => void }) {
-  const update = (key: string, value: unknown) => onChange({ ...content, [key]: value });
-  const features = (content?.features as Array<{icon: string; title: string; description: string}>) || [];
+  const data = content || {};
+  const update = (key: string, value: unknown) => onChange({ ...data, [key]: value });
+  const features = (data.features as Array<{icon: string; title: string; description: string}>) || [];
 
   const updateFeature = (index: number, field: string, value: string) => {
     const newFeatures = [...features];
@@ -757,8 +760,9 @@ function CuisinesTeaserEditor({ content, onChange }: { content: Record<string, u
 
 // Aménagements Teaser Editor
 function AmenagementsTeaserEditor({ content, onChange }: { content: Record<string, unknown>; onChange: (val: Record<string, unknown>) => void }) {
-  const update = (key: string, value: unknown) => onChange({ ...content, [key]: value });
-  const items = (content?.items as Array<{title: string; description: string; image: string; link: string}>) || [];
+  const data = content || {};
+  const update = (key: string, value: unknown) => onChange({ ...data, [key]: value });
+  const items = (data.items as Array<{title: string; description: string; image: string; link: string}>) || [];
 
   const updateItem = (index: number, field: string, value: string) => {
     const newItems = [...items];
@@ -834,7 +838,8 @@ function AmenagementsTeaserEditor({ content, onChange }: { content: Record<strin
 
 // Réalisations Teaser Editor
 function RealisationsTeaserEditor({ content, onChange }: { content: Record<string, unknown>; onChange: (val: Record<string, unknown>) => void }) {
-  const update = (key: string, value: unknown) => onChange({ ...content, [key]: value });
+  const data = content || {};
+  const update = (key: string, value: unknown) => onChange({ ...data, [key]: value });
 
   return (
     <div className="space-y-6">
@@ -879,7 +884,8 @@ function RealisationsTeaserEditor({ content, onChange }: { content: Record<strin
 
 // Fournisseurs Teaser Editor
 function FournisseursTeaserEditor({ content, onChange }: { content: Record<string, unknown>; onChange: (val: Record<string, unknown>) => void }) {
-  const update = (key: string, value: unknown) => onChange({ ...content, [key]: value });
+  const data = content || {};
+  const update = (key: string, value: unknown) => onChange({ ...data, [key]: value });
 
   return (
     <div className="space-y-6">
@@ -916,7 +922,8 @@ function FournisseursTeaserEditor({ content, onChange }: { content: Record<strin
 
 // Avis Editor
 function AvisEditor({ content, onChange }: { content: Record<string, unknown>; onChange: (val: Record<string, unknown>) => void }) {
-  const update = (key: string, value: unknown) => onChange({ ...content, [key]: value });
+  const data = content || {};
+  const update = (key: string, value: unknown) => onChange({ ...data, [key]: value });
 
   return (
     <div className="space-y-6">
@@ -978,7 +985,8 @@ function AvisEditor({ content, onChange }: { content: Record<string, unknown>; o
 
 // CTA Editor
 function CTAEditor({ content, onChange }: { content: Record<string, unknown>; onChange: (val: Record<string, unknown>) => void }) {
-  const update = (key: string, value: unknown) => onChange({ ...content, [key]: value });
+  const data = content || {};
+  const update = (key: string, value: unknown) => onChange({ ...data, [key]: value });
 
   return (
     <div className="space-y-8">
