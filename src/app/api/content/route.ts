@@ -31,7 +31,8 @@ export async function PUT(request: NextRequest) {
     
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error('Error updating site content:', error);
-    return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 });
+    const message = error instanceof Error ? error.message : String(error);
+    console.error('Error updating site content:', message, error);
+    return NextResponse.json({ error: 'Erreur serveur', details: message }, { status: 500 });
   }
 }
