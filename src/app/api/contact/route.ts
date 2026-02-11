@@ -3,6 +3,9 @@ import { getContactSubmissions, saveContactSubmission, markContactAsRead, delete
 import { isAuthenticated } from '@/lib/auth';
 import { ContactSubmission } from '@/types';
 import { v4 as uuidv4 } from 'uuid';
+import { revalidatePath } from 'next/cache';
+
+export const dynamic = 'force-dynamic';
 
 export async function GET() {
   try {
@@ -32,6 +35,7 @@ export async function POST(request: NextRequest) {
     
     await saveContactSubmission(submission);
     
+    revalidatePath('/', 'layout');
     return NextResponse.json({ success: true, message: 'Message envoyé avec succès' });
   } catch (error) {
     console.error('Error saving contact:', error);
@@ -52,6 +56,7 @@ export async function PUT(request: NextRequest) {
       await markContactAsRead(id);
     }
     
+    revalidatePath('/', 'layout');
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error('Error updating contact:', error);
@@ -69,6 +74,7 @@ export async function DELETE(request: NextRequest) {
     const { id } = await request.json();
     await deleteContactSubmission(id);
     
+    revalidatePath('/', 'layout');
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error('Error deleting contact:', error);

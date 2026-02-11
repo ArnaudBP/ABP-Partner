@@ -1,84 +1,45 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { readdir, unlink, stat } from 'fs/promises';
-import { join } from 'path';
 import { isAuthenticated } from '@/lib/auth';
-import { readFile } from 'fs/promises';
+import { listUploadedFiles, deleteFiles, readJson } from '@/lib/storage';
+
+export const dynamic = 'force-dynamic';
 
 // Dossiers à scanner
-const SCAN_FOLDERS = ['content', 'homepage', 'catalogues/pdf'];
+const SCAN_FOLDERS = ['content', 'homepage', 'catalogues/pdf', 'fournisseurs', 'hero'];
 
-// Extensions de fichiers à gérer
-const FILE_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.webp', '.gif', '.mp4', '.webm', '.mov', '.pdf', '.heic'];
+// Extensions de fichiers médias
+const FILE_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.webp', '.gif', '.avif', '.mp4', '.webm', '.mov', '.pdf', '.heic'];
 
-interface FileInfo {
-  path: string;
-  name: string;
-  size: number;
-  folder: string;
-}
-
-// Récupérer tous les fichiers uploadés
-async function getAllUploadedFiles(): Promise<FileInfo[]> {
-  const files: FileInfo[] = [];
-  const publicDir = join(process.cwd(), 'public');
-
-  for (const folder of SCAN_FOLDERS) {
-    const folderPath = join(publicDir, folder);
-    
-    try {
-      const items = await readdir(folderPath);
-      
-      for (const item of items) {
-        const ext = item.toLowerCase().substring(item.lastIndexOf('.'));
-        if (FILE_EXTENSIONS.includes(ext)) {
-          const filePath = join(folderPath, item);
-          const stats = await stat(filePath);
-          
-          files.push({
-            path: `/${folder}/${item}`,
-            name: item,
-            size: stats.size,
-            folder
-          });
-        }
-      }
-    } catch {
-      // Dossier n'existe pas, on continue
+// Extraire récursivement toutes les URLs référencées dans un objet
+function extractUrls(obj: unknown, usedUrls: Set<string>): void {
+  if (typeof obj === 'string') {
+    // Chemin local (/content/...) ou URL Blob (https://...blob.vercel-storage.com/...)
+    if (
+      (obj.startsWith('/') && FILE_EXTENSIONS.some(ext => obj.toLowerCase().includes(ext))) ||
+      obj.includes('blob.vercel-storage.com')
+    ) {
+      usedUrls.add(obj);
     }
+  } else if (Array.isArray(obj)) {
+    obj.forEach(item => extractUrls(item, usedUrls));
+  } else if (obj && typeof obj === 'object') {
+    Object.values(obj).forEach(value => extractUrls(value, usedUrls));
   }
-
-  return files;
 }
 
-// Récupérer toutes les URLs utilisées dans les données
+// Récupérer toutes les URLs référencées dans les données
 async function getUsedUrls(): Promise<Set<string>> {
   const usedUrls = new Set<string>();
-  const dataDir = join(process.cwd(), 'data');
-
-  // Fonction récursive pour extraire les URLs d'un objet
-  const extractUrls = (obj: unknown): void => {
-    if (typeof obj === 'string') {
-      // Vérifier si c'est une URL de fichier
-      if (obj.startsWith('/') && FILE_EXTENSIONS.some(ext => obj.toLowerCase().includes(ext))) {
-        usedUrls.add(obj);
-      }
-    } else if (Array.isArray(obj)) {
-      obj.forEach(item => extractUrls(item));
-    } else if (obj && typeof obj === 'object') {
-      Object.values(obj).forEach(value => extractUrls(value));
-    }
-  };
-
-  // Lire tous les fichiers JSON de data
   const jsonFiles = ['siteContent.json', 'realisations.json', 'fournisseurs.json', 'catalogues.json'];
-  
+
   for (const file of jsonFiles) {
     try {
-      const content = await readFile(join(dataDir, file), 'utf-8');
-      const data = JSON.parse(content);
-      extractUrls(data);
+      const data = await readJson(file, null);
+      if (data) {
+        extractUrls(data, usedUrls);
+      }
     } catch {
-      // Fichier n'existe pas ou erreur de parsing
+      // Fichier n'existe pas
     }
   }
 
@@ -93,11 +54,12 @@ export async function GET() {
       return NextResponse.json({ error: 'Non autorisé' }, { status: 401 });
     }
 
-    const allFiles = await getAllUploadedFiles();
+    const allFiles = await listUploadedFiles(SCAN_FOLDERS);
     const usedUrls = await getUsedUrls();
 
-    const unusedFiles = allFiles.filter(file => !usedUrls.has(file.path));
-    const usedFiles = allFiles.filter(file => usedUrls.has(file.path));
+    // Comparer : un fichier est "utilisé" si son path OU son url apparaît dans les données
+    const unusedFiles = allFiles.filter(file => !usedUrls.has(file.path) && !usedUrls.has(file.url));
+    const usedFiles = allFiles.filter(file => usedUrls.has(file.path) || usedUrls.has(file.url));
 
     const totalUnusedSize = unusedFiles.reduce((acc, file) => acc + file.size, 0);
     const totalUsedSize = usedFiles.reduce((acc, file) => acc + file.size, 0);
@@ -112,8 +74,8 @@ export async function GET() {
         unusedSize: totalUnusedSize,
         usedSize: totalUsedSize,
         unusedSizeMB: (totalUnusedSize / (1024 * 1024)).toFixed(2),
-        usedSizeMB: (totalUsedSize / (1024 * 1024)).toFixed(2)
-      }
+        usedSizeMB: (totalUsedSize / (1024 * 1024)).toFixed(2),
+      },
     });
   } catch (error) {
     console.error('Error analyzing files:', error);
@@ -121,7 +83,7 @@ export async function GET() {
   }
 }
 
-// DELETE: Supprimer les fichiers non utilisés
+// DELETE: Supprimer les fichiers sélectionnés
 export async function DELETE(request: NextRequest) {
   try {
     const authenticated = await isAuthenticated();
@@ -130,36 +92,18 @@ export async function DELETE(request: NextRequest) {
     }
 
     const { files } = await request.json();
-    
+
     if (!files || !Array.isArray(files)) {
       return NextResponse.json({ error: 'Liste de fichiers invalide' }, { status: 400 });
     }
 
-    const publicDir = join(process.cwd(), 'public');
-    const deleted: string[] = [];
-    const errors: string[] = [];
-
-    for (const filePath of files) {
-      try {
-        // Sécurité: vérifier que le chemin est bien dans public
-        const fullPath = join(publicDir, filePath);
-        if (!fullPath.startsWith(publicDir)) {
-          errors.push(`Chemin invalide: ${filePath}`);
-          continue;
-        }
-
-        await unlink(fullPath);
-        deleted.push(filePath);
-      } catch (err) {
-        errors.push(`Erreur suppression ${filePath}: ${err}`);
-      }
-    }
+    const result = await deleteFiles(files);
 
     return NextResponse.json({
       success: true,
-      deleted,
-      errors,
-      deletedCount: deleted.length
+      deleted: result.deleted,
+      errors: result.errors,
+      deletedCount: result.deleted.length,
     });
   } catch (error) {
     console.error('Error deleting files:', error);

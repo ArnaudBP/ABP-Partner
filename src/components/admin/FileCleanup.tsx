@@ -5,6 +5,7 @@ import { Trash2, RefreshCw, AlertTriangle, CheckCircle, HardDrive, Image, Video,
 
 interface FileInfo {
   path: string;
+  url: string;
   name: string;
   size: number;
   folder: string;
@@ -39,7 +40,7 @@ export default function FileCleanup() {
       const data = await response.json();
       setUnusedFiles(data.unusedFiles);
       setStats(data.stats);
-      setSelectedFiles(new Set(data.unusedFiles.map((f: FileInfo) => f.path)));
+      setSelectedFiles(new Set(data.unusedFiles.map((f: FileInfo) => f.url)));
     } catch (error) {
       setMessage({ type: 'error', text: 'Erreur lors de l\'analyse des fichiers' });
       console.error(error);
@@ -86,18 +87,18 @@ export default function FileCleanup() {
     }
   };
 
-  const toggleFile = (path: string) => {
+  const toggleFile = (url: string) => {
     const newSelected = new Set(selectedFiles);
-    if (newSelected.has(path)) {
-      newSelected.delete(path);
+    if (newSelected.has(url)) {
+      newSelected.delete(url);
     } else {
-      newSelected.add(path);
+      newSelected.add(url);
     }
     setSelectedFiles(newSelected);
   };
 
   const selectAll = () => {
-    setSelectedFiles(new Set(unusedFiles.map(f => f.path)));
+    setSelectedFiles(new Set(unusedFiles.map(f => f.url)));
   };
 
   const selectNone = () => {
@@ -214,14 +215,14 @@ export default function FileCleanup() {
               <tbody className="divide-y">
                 {unusedFiles.map((file) => (
                   <tr 
-                    key={file.path} 
-                    className={`hover:bg-gray-50 ${selectedFiles.has(file.path) ? 'bg-red-50' : ''}`}
+                    key={file.url} 
+                    className={`hover:bg-gray-50 ${selectedFiles.has(file.url) ? 'bg-red-50' : ''}`}
                   >
                     <td className="px-4 py-3">
                       <input
                         type="checkbox"
-                        checked={selectedFiles.has(file.path)}
-                        onChange={() => toggleFile(file.path)}
+                        checked={selectedFiles.has(file.url)}
+                        onChange={() => toggleFile(file.url)}
                         className="rounded"
                       />
                     </td>

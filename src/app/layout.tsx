@@ -6,6 +6,8 @@ import { ThemeProvider } from "@/components/ThemeProvider";
 import { SiteContentProvider } from "@/components/SiteContentProvider";
 import { getSiteContent } from "@/lib/data";
 
+export const dynamic = 'force-dynamic';
+
 const playfair = Playfair_Display({
   variable: "--font-playfair",
   subsets: ["latin"],

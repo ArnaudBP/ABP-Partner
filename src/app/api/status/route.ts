@@ -1,11 +1,16 @@
 import { NextResponse } from 'next/server';
 import { isProduction } from '@/lib/storage';
 import { list } from '@vercel/blob';
+import { isAuthenticated } from '@/lib/auth';
 
 export const dynamic = 'force-dynamic';
 
-// Diagnostic endpoint - no auth required
 export async function GET() {
+  const authenticated = await isAuthenticated();
+  if (!authenticated) {
+    return NextResponse.json({ error: 'Non autorisé' }, { status: 401 });
+  }
+
   const checks: Record<string, unknown> = {
     isProduction,
     vercelEnv: process.env.VERCEL || 'not set',
