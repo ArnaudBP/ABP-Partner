@@ -76,6 +76,7 @@ async function writeJsonToBlob<T>(filename: string, data: T): Promise<void> {
   await put(blobPath, content, {
     access: 'public',
     addRandomSuffix: false,
+    allowOverwrite: true,
     contentType: 'application/json',
   });
 }
@@ -149,6 +150,7 @@ async function uploadToBlob(
   const blob = await put(blobPath, buffer, {
     access: 'public',
     addRandomSuffix: false,
+    allowOverwrite: true,
   });
   
   return blob.url;
