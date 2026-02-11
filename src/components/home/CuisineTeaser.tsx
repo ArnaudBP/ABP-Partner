@@ -63,16 +63,7 @@ export default function CuisineTeaser() {
     if (siteContent?.homepage) {
       const hp = siteContent.homepage as Record<string, unknown>;
       if (hp.cuisinesTeaser) setData(hp.cuisinesTeaser as CuisinesTeaserData);
-      return;
     }
-    fetch('/api/content')
-      .then(res => res.json())
-      .then(content => {
-        if (content.homepage?.cuisinesTeaser) {
-          setData(content.homepage.cuisinesTeaser);
-        }
-      })
-      .catch(console.error);
   }, [siteContent]);
 
   const title = data?.title || "Pourquoi travailler";

@@ -1,9 +1,9 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Phone, Calendar } from "lucide-react";
+import { useSiteContent } from '../SiteContentProvider';
 
 interface CTAContent {
   accroche: string;
@@ -24,18 +24,11 @@ const defaultContent: CTAContent = {
 };
 
 export default function CuisinesCTA() {
-  const [content, setContent] = useState<CTAContent>(defaultContent);
-
-  useEffect(() => {
-    fetch('/api/content')
-      .then(res => res.json())
-      .then(data => {
-        if (data.pageCuisines?.cta) {
-          setContent(prev => ({ ...prev, ...data.pageCuisines.cta }));
-        }
-      })
-      .catch(console.error);
-  }, []);
+  const siteContent = useSiteContent();
+  const pageData = siteContent?.pageCuisines as Record<string, unknown> | undefined;
+  const content = pageData?.cta
+    ? { ...defaultContent, ...(pageData.cta as Partial<CTAContent>) }
+    : defaultContent;
 
   return (
     <section className="py-24 bg-abp-primary relative overflow-hidden">

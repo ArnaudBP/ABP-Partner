@@ -27,15 +27,6 @@ export default function FeaturedProjects() {
     if (siteContent?.homepage) {
       const hp = siteContent.homepage as Record<string, unknown>;
       if (hp.realisationsTeaser) setData(hp.realisationsTeaser as RealisationsTeaserData);
-    } else {
-      fetch('/api/content')
-        .then(res => res.json())
-        .then(content => {
-          if (content.homepage?.realisationsTeaser) {
-            setData(content.homepage.realisationsTeaser);
-          }
-        })
-        .catch(console.error);
     }
 
     // Charger les réalisations

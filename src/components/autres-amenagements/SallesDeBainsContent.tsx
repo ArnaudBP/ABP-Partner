@@ -1,9 +1,9 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
 import Link from "next/link";
 import { CheckCircle, Bath, Droplets, Sparkles, Shield, LucideIcon } from "lucide-react";
+import { useSiteContent } from '../SiteContentProvider';
 
 const iconMap: Record<string, LucideIcon> = {
   Bath,
@@ -79,22 +79,15 @@ const defaultContent: SDBContent = {
 };
 
 export default function SallesDeBainsContent() {
-  const [content, setContent] = useState<SDBContent>(defaultContent);
-
-  useEffect(() => {
-    fetch('/api/content')
-      .then(res => res.json())
-      .then(data => {
-        if (data.pageSallesDeBains) {
-          setContent(prev => ({
-            hero: { ...prev.hero, ...data.pageSallesDeBains.hero },
-            features: { ...prev.features, ...data.pageSallesDeBains.features },
-            services: { ...prev.services, ...data.pageSallesDeBains.services }
-          }));
-        }
-      })
-      .catch(console.error);
-  }, []);
+  const siteContentCtx = useSiteContent();
+  const pageSDB = siteContentCtx?.pageSallesDeBains as Record<string, unknown> | undefined;
+  const content = pageSDB
+    ? {
+        hero: { ...defaultContent.hero, ...(pageSDB.hero as object) },
+        features: { ...defaultContent.features, ...(pageSDB.features as object) },
+        services: { ...defaultContent.services, ...(pageSDB.services as object) }
+      }
+    : defaultContent;
 
   return (
     <section className="pt-32 pb-24 bg-white">

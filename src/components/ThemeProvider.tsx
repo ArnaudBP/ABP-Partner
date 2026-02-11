@@ -20,23 +20,10 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   const [loaded, setLoaded] = useState(!!siteContent);
 
   useEffect(() => {
-    if (siteContent) {
-      if (siteContent.theme?.paletteId) {
-        setPalette(getPaletteById(siteContent.theme.paletteId));
-      }
-      setLoaded(true);
-      return;
+    if (siteContent?.theme?.paletteId) {
+      setPalette(getPaletteById(siteContent.theme.paletteId));
     }
-    // Fallback: charger depuis l'API si pas de contexte
-    fetch('/api/content')
-      .then(res => res.json())
-      .then(content => {
-        if (content.theme?.paletteId) {
-          setPalette(getPaletteById(content.theme.paletteId));
-        }
-        setLoaded(true);
-      })
-      .catch(() => setLoaded(true));
+    setLoaded(true);
   }, [siteContent]);
 
   useEffect(() => {

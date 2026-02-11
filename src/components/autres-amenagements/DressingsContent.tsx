@@ -1,9 +1,9 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Shirt, Maximize, Lightbulb, Layers, LucideIcon } from "lucide-react";
+import { useSiteContent } from '../SiteContentProvider';
 
 const iconMap: Record<string, LucideIcon> = {
   Shirt,
@@ -78,22 +78,15 @@ const defaultContent: DressingsContentType = {
 };
 
 export default function DressingsContent() {
-  const [content, setContent] = useState<DressingsContentType>(defaultContent);
-
-  useEffect(() => {
-    fetch('/api/content')
-      .then(res => res.json())
-      .then(data => {
-        if (data.pageDressings) {
-          setContent(prev => ({
-            hero: { ...prev.hero, ...data.pageDressings.hero },
-            features: { ...prev.features, ...data.pageDressings.features },
-            configurations: { ...prev.configurations, ...data.pageDressings.configurations }
-          }));
-        }
-      })
-      .catch(console.error);
-  }, []);
+  const siteContentCtx = useSiteContent();
+  const pageDressings = siteContentCtx?.pageDressings as Record<string, unknown> | undefined;
+  const content = pageDressings
+    ? {
+        hero: { ...defaultContent.hero, ...(pageDressings.hero as object) },
+        features: { ...defaultContent.features, ...(pageDressings.features as object) },
+        configurations: { ...defaultContent.configurations, ...(pageDressings.configurations as object) }
+      }
+    : defaultContent;
 
   return (
     <section className="pt-32 pb-24 bg-white">

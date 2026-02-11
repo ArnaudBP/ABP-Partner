@@ -44,19 +44,11 @@ export default function DynamicHomeSections() {
       const order = (siteContent.homepage as Record<string, unknown>)?.sectionsOrder as SectionConfig[];
       setSections(order || DEFAULT_SECTIONS);
       setLoading(false);
-      return;
+    } else {
+      setSections(DEFAULT_SECTIONS);
+      setLoading(false);
     }
-    fetch('/api/content')
-      .then(res => res.json())
-      .then(content => {
-        setSections(content.homepage?.sectionsOrder || DEFAULT_SECTIONS);
-        setLoading(false);
-      })
-      .catch(() => {
-        setSections(DEFAULT_SECTIONS);
-        setLoading(false);
-      });
-  }, []);
+  }, [siteContent]);
 
   if (loading) {
     return <div className="min-h-[50vh]" />;

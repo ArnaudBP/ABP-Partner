@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { revalidatePath } from 'next/cache';
 import { getRealisations, saveRealisation, deleteRealisation } from '@/lib/data';
 import { isAuthenticated } from '@/lib/auth';
 import { Realisation } from '@/types';
@@ -46,6 +47,7 @@ export async function POST(request: NextRequest) {
     const realisation: Realisation = await request.json();
     await saveRealisation(realisation);
     
+    revalidatePath('/', 'layout');
     return NextResponse.json({ success: true, realisation });
   } catch (error) {
     console.error('Error saving realisation:', error);
@@ -63,6 +65,7 @@ export async function DELETE(request: NextRequest) {
     const { id } = await request.json();
     await deleteRealisation(id);
     
+    revalidatePath('/', 'layout');
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error('Error deleting realisation:', error);

@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { revalidatePath } from 'next/cache';
 import { getCatalogues, saveCatalogue, deleteCatalogue } from '@/lib/data';
 import { isAuthenticated } from '@/lib/auth';
 import { Catalogue } from '@/types';
@@ -33,6 +34,7 @@ export async function POST(request: NextRequest) {
     const catalogue: Catalogue = await request.json();
     await saveCatalogue(catalogue);
     
+    revalidatePath('/', 'layout');
     return NextResponse.json({ success: true, catalogue });
   } catch (error) {
     console.error('Error saving catalogue:', error);
@@ -50,6 +52,7 @@ export async function DELETE(request: NextRequest) {
     const { id } = await request.json();
     await deleteCatalogue(id);
     
+    revalidatePath('/', 'layout');
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error('Error deleting catalogue:', error);

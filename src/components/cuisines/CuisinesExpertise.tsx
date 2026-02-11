@@ -1,8 +1,8 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
 import { CheckCircle, Ruler, Eye, Shield, Sparkles, Clock, Users, LucideIcon } from "lucide-react";
+import { useSiteContent } from '../SiteContentProvider';
 
 const iconMap: Record<string, LucideIcon> = {
   Ruler,
@@ -54,18 +54,11 @@ const defaultContent: ExpertiseContent = {
 };
 
 export default function CuisinesExpertise() {
-  const [content, setContent] = useState<ExpertiseContent>(defaultContent);
-
-  useEffect(() => {
-    fetch('/api/content')
-      .then(res => res.json())
-      .then(data => {
-        if (data.pageCuisines?.expertise) {
-          setContent(prev => ({ ...prev, ...data.pageCuisines.expertise }));
-        }
-      })
-      .catch(console.error);
-  }, []);
+  const siteContent = useSiteContent();
+  const pageData = siteContent?.pageCuisines as Record<string, unknown> | undefined;
+  const content = pageData?.expertise
+    ? { ...defaultContent, ...(pageData.expertise as Partial<ExpertiseContent>) }
+    : defaultContent;
 
   return (
     <section className="py-24 bg-white">

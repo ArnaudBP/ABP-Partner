@@ -44,16 +44,7 @@ export default function Navbar() {
   useEffect(() => {
     if (siteContent?.navbar) {
       setNavbarData(siteContent.navbar as NavbarData);
-      return;
     }
-    fetch('/api/content')
-      .then(res => res.json())
-      .then(content => {
-        if (content.navbar) {
-          setNavbarData(content.navbar);
-        }
-      })
-      .catch(console.error);
   }, [siteContent]);
 
   const logo = navbarData?.logo;

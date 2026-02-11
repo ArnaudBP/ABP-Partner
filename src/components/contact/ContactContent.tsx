@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { MapPin, Phone, Mail, Clock, CheckCircle, Send } from "lucide-react";
+import { useSiteContent } from '../SiteContentProvider';
 
 interface PageContactContent {
   headerAccroche: string;
@@ -45,7 +46,9 @@ const defaultContent: PageContactContent = {
 };
 
 export default function ContactContent() {
-  const [content, setContent] = useState<PageContactContent>(defaultContent);
+  const siteContent = useSiteContent();
+  const pageContact = siteContent?.pageContact as Partial<PageContactContent> | undefined;
+  const content = pageContact ? { ...defaultContent, ...pageContact } : defaultContent;
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -57,17 +60,6 @@ export default function ContactContent() {
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState("");
-
-  useEffect(() => {
-    fetch('/api/content')
-      .then(res => res.json())
-      .then(data => {
-        if (data.pageContact) {
-          setContent(prev => ({ ...prev, ...data.pageContact }));
-        }
-      })
-      .catch(console.error);
-  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

@@ -31,19 +31,7 @@ export default function CTAContact() {
       const hp = siteContent.homepage as Record<string, unknown>;
       if (hp?.ctaSection) setData(hp.ctaSection as CTASectionData);
       if (siteContent.contact) setContact(siteContent.contact as {phone?: string; email?: string; address?: string});
-      return;
     }
-    fetch('/api/content')
-      .then(res => res.json())
-      .then(content => {
-        if (content.homepage?.ctaSection) {
-          setData(content.homepage.ctaSection);
-        }
-        if (content.contact) {
-          setContact(content.contact);
-        }
-      })
-      .catch(console.error);
   }, [siteContent]);
 
   const title = data?.title || "Envie d'en";

@@ -3,6 +3,8 @@ import { Playfair_Display, Montserrat, Nothing_You_Could_Do } from "next/font/go
 import "./globals.css";
 import SmoothScroll from "@/components/SmoothScroll";
 import { ThemeProvider } from "@/components/ThemeProvider";
+import { SiteContentProvider } from "@/components/SiteContentProvider";
+import { getSiteContent } from "@/lib/data";
 
 const playfair = Playfair_Display({
   variable: "--font-playfair",
@@ -31,20 +33,24 @@ export const metadata: Metadata = {
   description: "Expert cuisiniste à domicile en Île-de-France. Conception sur mesure, optimisation d'espace et conseil professionnel.",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const content = await getSiteContent();
+
   return (
     <html lang="fr" className="scroll-smooth">
       <body
         className={`${playfair.variable} ${montserrat.variable} ${nothingYouCouldDo.variable} font-sans antialiased bg-white text-gray-900`}
       >
-        <ThemeProvider>
-          <SmoothScroll />
-          {children}
-        </ThemeProvider>
+        <SiteContentProvider content={content}>
+          <ThemeProvider>
+            <SmoothScroll />
+            {children}
+          </ThemeProvider>
+        </SiteContentProvider>
       </body>
     </html>
   );

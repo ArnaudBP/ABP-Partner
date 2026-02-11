@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
+import { useSiteContent } from '../SiteContentProvider';
 
 interface EtapeItem {
   number: string;
@@ -32,18 +32,11 @@ const defaultContent: ProcessContent = {
 };
 
 export default function CuisinesProcess() {
-  const [content, setContent] = useState<ProcessContent>(defaultContent);
-
-  useEffect(() => {
-    fetch('/api/content')
-      .then(res => res.json())
-      .then(data => {
-        if (data.pageCuisines?.process) {
-          setContent(prev => ({ ...prev, ...data.pageCuisines.process }));
-        }
-      })
-      .catch(console.error);
-  }, []);
+  const siteContent = useSiteContent();
+  const pageData = siteContent?.pageCuisines as Record<string, unknown> | undefined;
+  const content = pageData?.process
+    ? { ...defaultContent, ...(pageData.process as Partial<ProcessContent>) }
+    : defaultContent;
 
   return (
     <section className="py-24 bg-gray-50">

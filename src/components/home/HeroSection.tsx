@@ -25,16 +25,7 @@ export default function HeroSection() {
   useEffect(() => {
     if (siteContent?.hero) {
       setData(siteContent.hero as HeroData);
-      return;
     }
-    fetch('/api/content')
-      .then(res => res.json())
-      .then(content => {
-        if (content.hero) {
-          setData(content.hero);
-        }
-      })
-      .catch(console.error);
   }, [siteContent]);
 
   const videoUrl = data?.videoUrl;

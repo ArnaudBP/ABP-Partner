@@ -67,16 +67,7 @@ export default function Footer() {
   useEffect(() => {
     if (siteContent?.footer) {
       setContent(prev => ({ ...prev, ...(siteContent.footer as Partial<FooterContent>) }));
-      return;
     }
-    fetch('/api/content')
-      .then(res => res.json())
-      .then(data => {
-        if (data.footer) {
-          setContent(prev => ({ ...prev, ...data.footer }));
-        }
-      })
-      .catch(console.error);
   }, [siteContent]);
 
   // Filtrer les réseaux sociaux qui ont un lien

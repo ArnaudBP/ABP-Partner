@@ -45,16 +45,7 @@ export default function AutresAmenagementsTeaser() {
     if (siteContent?.homepage) {
       const hp = siteContent.homepage as Record<string, unknown>;
       if (hp.autresAmenagementsTeaser) setData(hp.autresAmenagementsTeaser as AmenagementsTeaserData);
-      return;
     }
-    fetch('/api/content')
-      .then(res => res.json())
-      .then(content => {
-        if (content.homepage?.autresAmenagementsTeaser) {
-          setData(content.homepage.autresAmenagementsTeaser);
-        }
-      })
-      .catch(console.error);
   }, [siteContent]);
 
   const title = data?.title || "Pas que";

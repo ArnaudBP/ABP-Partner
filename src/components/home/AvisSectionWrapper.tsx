@@ -20,16 +20,7 @@ export default function AvisSectionWrapper() {
     if (siteContent?.homepage) {
       const hp = siteContent.homepage as Record<string, unknown>;
       if (hp.avisSection) setData(hp.avisSection as AvisSectionData);
-      return;
     }
-    fetch('/api/content')
-      .then(res => res.json())
-      .then(content => {
-        if (content.homepage?.avisSection) {
-          setData(content.homepage.avisSection);
-        }
-      })
-      .catch(console.error);
   }, [siteContent]);
 
   if (!data) {

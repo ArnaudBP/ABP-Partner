@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { revalidatePath } from 'next/cache';
 import { getFournisseurs, saveFournisseur, deleteFournisseur } from '@/lib/data';
 import { isAuthenticated } from '@/lib/auth';
 import { Fournisseur } from '@/types';
@@ -34,6 +35,7 @@ export async function POST(request: NextRequest) {
     const fournisseur: Fournisseur = await request.json();
     await saveFournisseur(fournisseur);
     
+    revalidatePath('/', 'layout');
     return NextResponse.json({ success: true, fournisseur });
   } catch (error) {
     console.error('Error saving fournisseur:', error);
@@ -51,6 +53,7 @@ export async function DELETE(request: NextRequest) {
     const { id } = await request.json();
     await deleteFournisseur(id);
     
+    revalidatePath('/', 'layout');
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error('Error deleting fournisseur:', error);

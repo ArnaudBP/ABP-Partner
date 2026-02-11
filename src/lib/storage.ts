@@ -2,8 +2,8 @@ import { put, del, list, head } from '@vercel/blob';
 import { promises as fs } from 'fs';
 import path from 'path';
 
-// Détecte si on est en production (Vercel)
-const isProduction = process.env.VERCEL === '1' || process.env.NODE_ENV === 'production';
+// Détecte si on est sur Vercel (pas juste NODE_ENV=production)
+const isProduction = process.env.VERCEL === '1';
 
 // ==================== JSON STORAGE ====================
 

@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { revalidatePath } from 'next/cache';
 import { getSiteContent, updateSiteContent } from '@/lib/data';
 import { isAuthenticated } from '@/lib/auth';
 import { SiteContent } from '@/types';
@@ -28,6 +29,9 @@ export async function PUT(request: NextRequest) {
     
     const content: Partial<SiteContent> = await request.json();
     await updateSiteContent(content);
+    
+    // Revalidate all pages to reflect changes immediately
+    revalidatePath('/', 'layout');
     
     return NextResponse.json({ success: true });
   } catch (error) {

@@ -1,8 +1,8 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
 import Link from "next/link";
+import { useSiteContent } from '../SiteContentProvider';
 
 interface StyleItem {
   name: string;
@@ -32,18 +32,11 @@ const defaultContent: StylesContent = {
 };
 
 export default function CuisinesStyles() {
-  const [content, setContent] = useState<StylesContent>(defaultContent);
-
-  useEffect(() => {
-    fetch('/api/content')
-      .then(res => res.json())
-      .then(data => {
-        if (data.pageCuisines?.styles) {
-          setContent(prev => ({ ...prev, ...data.pageCuisines.styles }));
-        }
-      })
-      .catch(console.error);
-  }, []);
+  const siteContent = useSiteContent();
+  const pageData = siteContent?.pageCuisines as Record<string, unknown> | undefined;
+  const content = pageData?.styles
+    ? { ...defaultContent, ...(pageData.styles as Partial<StylesContent>) }
+    : defaultContent;
 
   return (
     <section className="py-24 bg-white">

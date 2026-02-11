@@ -25,15 +25,6 @@ export default function FournisseursTeaser() {
     if (siteContent?.homepage) {
       const hp = siteContent.homepage as Record<string, unknown>;
       if (hp.fournisseursTeaser) setData(hp.fournisseursTeaser as FournisseursTeaserData);
-    } else {
-      fetch('/api/content')
-        .then(res => res.json())
-        .then(content => {
-          if (content.homepage?.fournisseursTeaser) {
-            setData(content.homepage.fournisseursTeaser);
-          }
-        })
-        .catch(console.error);
     }
 
     // Charger les fournisseurs

@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
+import { useSiteContent } from '../SiteContentProvider';
 
 interface HeroContent {
   accroche: string;
@@ -20,18 +20,11 @@ const defaultContent: HeroContent = {
 };
 
 export default function CuisinesHero() {
-  const [content, setContent] = useState<HeroContent>(defaultContent);
-
-  useEffect(() => {
-    fetch('/api/content')
-      .then(res => res.json())
-      .then(data => {
-        if (data.pageCuisines?.hero) {
-          setContent(data.pageCuisines.hero);
-        }
-      })
-      .catch(console.error);
-  }, []);
+  const siteContent = useSiteContent();
+  const pageData = siteContent?.pageCuisines as Record<string, unknown> | undefined;
+  const content = pageData?.hero
+    ? { ...defaultContent, ...(pageData.hero as Partial<HeroContent>) }
+    : defaultContent;
 
   return (
     <section className="relative h-[60vh] min-h-[400px] flex items-center">
