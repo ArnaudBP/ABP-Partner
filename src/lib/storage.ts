@@ -165,7 +165,7 @@ async function deleteFromBlob(fileUrl: string): Promise<void> {
 // ==================== MIGRATION HELPER ====================
 
 export async function migrateDataToBlob(): Promise<{ success: boolean; migrated: string[] }> {
-  const files = ['siteContent.json', 'realisations.json', 'fournisseurs.json', 'catalogues.json', 'contacts.json'];
+  const files = ['siteContent.json', 'realisations.json', 'fournisseurs.json', 'catalogues.json', 'contacts.json', 'admin.json'];
   const migrated: string[] = [];
 
   for (const filename of files) {

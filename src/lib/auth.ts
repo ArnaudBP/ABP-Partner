@@ -1,8 +1,7 @@
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import { cookies } from 'next/headers';
-import { promises as fs } from 'fs';
-import path from 'path';
+import { readJson, writeJson } from './storage';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'abp-partner-secret-key-change-in-production';
 const COOKIE_NAME = 'abp-admin-token';
@@ -12,15 +11,17 @@ interface AdminCredentials {
   passwordHash: string;
 }
 
+const DEFAULT_CREDENTIALS: AdminCredentials = {
+  username: 'admin',
+  passwordHash: '$2a$10$defaulthashdonotuse'
+};
+
 async function getAdminCredentials(): Promise<AdminCredentials> {
-  const filePath = path.join(process.cwd(), 'data', 'admin.json');
-  const data = await fs.readFile(filePath, 'utf-8');
-  return JSON.parse(data);
+  return readJson<AdminCredentials>('admin.json', DEFAULT_CREDENTIALS);
 }
 
 async function saveAdminCredentials(credentials: AdminCredentials): Promise<void> {
-  const filePath = path.join(process.cwd(), 'data', 'admin.json');
-  await fs.writeFile(filePath, JSON.stringify(credentials, null, 2), 'utf-8');
+  await writeJson('admin.json', credentials);
 }
 
 export async function hashPassword(password: string): Promise<string> {
