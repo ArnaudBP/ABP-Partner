@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { writeFile, mkdir } from 'fs/promises';
-import { join } from 'path';
 import { isAuthenticated } from '@/lib/auth';
+import { uploadFile } from '@/lib/storage';
 
 // Augmenter la limite de taille pour cette route (100 Mo)
 export const config = {
@@ -27,21 +26,12 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Aucun fichier fourni' }, { status: 400 });
     }
 
-    const bytes = await file.arrayBuffer();
-    const buffer = Buffer.from(bytes);
-
-    // Créer le dossier si nécessaire
-    const uploadDir = join(process.cwd(), 'public', folder);
-    await mkdir(uploadDir, { recursive: true });
-
     // Générer un nom de fichier unique
     const timestamp = Date.now();
     const filename = `${timestamp}-${file.name.replace(/[^a-zA-Z0-9.-]/g, '_')}`;
-    const filepath = join(uploadDir, filename);
 
-    await writeFile(filepath, buffer);
-
-    const publicPath = folder ? `/${folder}/${filename}` : `/${filename}`;
+    // Upload via storage layer (local ou Blob selon environnement)
+    const publicPath = await uploadFile(file, filename, folder);
 
     return NextResponse.json({ 
       success: true, 
