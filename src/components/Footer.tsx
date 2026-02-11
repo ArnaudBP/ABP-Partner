@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { Facebook, Instagram, Linkedin } from "lucide-react";
+import { useSiteContent } from './SiteContentProvider';
 
 interface FooterContent {
   brandName: string;
@@ -57,9 +58,17 @@ const HouzzIcon = ({ size = 16 }: { size?: number }) => (
 );
 
 export default function Footer() {
-  const [content, setContent] = useState<FooterContent>(defaultContent);
+  const siteContent = useSiteContent();
+  const initialFooter = siteContent?.footer 
+    ? { ...defaultContent, ...(siteContent.footer as Partial<FooterContent>) } 
+    : defaultContent;
+  const [content, setContent] = useState<FooterContent>(initialFooter);
 
   useEffect(() => {
+    if (siteContent?.footer) {
+      setContent(prev => ({ ...prev, ...(siteContent.footer as Partial<FooterContent>) }));
+      return;
+    }
     fetch('/api/content')
       .then(res => res.json())
       .then(data => {
@@ -68,7 +77,7 @@ export default function Footer() {
         }
       })
       .catch(console.error);
-  }, []);
+  }, [siteContent]);
 
   // Filtrer les réseaux sociaux qui ont un lien
   const activeSocialLinks = [

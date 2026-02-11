@@ -169,6 +169,16 @@ export interface SiteContent {
   autresAmenagements: AutresAmenagementsContent;
   contact: ContactContent;
   company: CompanyInfo;
+  // Sections dynamiques ajoutées via le back-office
+  theme?: { paletteId: string };
+  navbar?: { logo?: string; title?: string; subtitle?: string };
+  homepage?: Record<string, unknown>;
+  footer?: Partial<FooterContent>;
+  seo?: Record<string, unknown>;
+  pageContact?: Partial<ContactPageContent>;
+  pageSallesDeBains?: Record<string, unknown>;
+  pageDressings?: Record<string, unknown>;
+  [key: string]: unknown;
 }
 
 export interface ContactFormData {

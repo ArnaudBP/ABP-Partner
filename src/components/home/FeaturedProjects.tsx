@@ -6,6 +6,7 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Realisation } from "@/types";
+import { useSiteContent } from '../SiteContentProvider';
 
 interface RealisationsTeaserData {
   title?: string;
@@ -17,18 +18,25 @@ interface RealisationsTeaserData {
 export default function FeaturedProjects() {
   const [projects, setProjects] = useState<Realisation[]>([]);
   const [loading, setLoading] = useState(true);
-  const [data, setData] = useState<RealisationsTeaserData | null>(null);
+  const siteContent = useSiteContent();
+  const [data, setData] = useState<RealisationsTeaserData | null>(
+    (siteContent?.homepage as Record<string, unknown>)?.realisationsTeaser as RealisationsTeaserData || null
+  );
 
   useEffect(() => {
-    // Charger les données du teaser
-    fetch('/api/content')
-      .then(res => res.json())
-      .then(content => {
-        if (content.homepage?.realisationsTeaser) {
-          setData(content.homepage.realisationsTeaser);
-        }
-      })
-      .catch(console.error);
+    if (siteContent?.homepage) {
+      const hp = siteContent.homepage as Record<string, unknown>;
+      if (hp.realisationsTeaser) setData(hp.realisationsTeaser as RealisationsTeaserData);
+    } else {
+      fetch('/api/content')
+        .then(res => res.json())
+        .then(content => {
+          if (content.homepage?.realisationsTeaser) {
+            setData(content.homepage.realisationsTeaser);
+          }
+        })
+        .catch(console.error);
+    }
 
     // Charger les réalisations
     fetch('/api/realisations?featured=true')
@@ -38,7 +46,7 @@ export default function FeaturedProjects() {
         setLoading(false);
       })
       .catch(() => setLoading(false));
-  }, []);
+  }, [siteContent]);
 
   const title = data?.title || "Quelques projets";
   const titleHighlight = data?.titleHighlight || "dont je suis fier";

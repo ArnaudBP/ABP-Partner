@@ -5,6 +5,7 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Fournisseur } from "@/types";
+import { useSiteContent } from '../SiteContentProvider';
 
 interface FournisseursTeaserData {
   title?: string;
@@ -15,18 +16,25 @@ interface FournisseursTeaserData {
 export default function FournisseursTeaser() {
   const [fournisseurs, setFournisseurs] = useState<Fournisseur[]>([]);
   const [loading, setLoading] = useState(true);
-  const [data, setData] = useState<FournisseursTeaserData | null>(null);
+  const siteContent = useSiteContent();
+  const [data, setData] = useState<FournisseursTeaserData | null>(
+    (siteContent?.homepage as Record<string, unknown>)?.fournisseursTeaser as FournisseursTeaserData || null
+  );
 
   useEffect(() => {
-    // Charger les données du teaser
-    fetch('/api/content')
-      .then(res => res.json())
-      .then(content => {
-        if (content.homepage?.fournisseursTeaser) {
-          setData(content.homepage.fournisseursTeaser);
-        }
-      })
-      .catch(console.error);
+    if (siteContent?.homepage) {
+      const hp = siteContent.homepage as Record<string, unknown>;
+      if (hp.fournisseursTeaser) setData(hp.fournisseursTeaser as FournisseursTeaserData);
+    } else {
+      fetch('/api/content')
+        .then(res => res.json())
+        .then(content => {
+          if (content.homepage?.fournisseursTeaser) {
+            setData(content.homepage.fournisseursTeaser);
+          }
+        })
+        .catch(console.error);
+    }
 
     // Charger les fournisseurs
     fetch('/api/fournisseurs')
@@ -36,7 +44,7 @@ export default function FournisseursTeaser() {
         setLoading(false);
       })
       .catch(() => setLoading(false));
-  }, []);
+  }, [siteContent]);
 
   const title = data?.title || "Des marques";
   const titleHighlight = data?.titleHighlight || "de confiance";

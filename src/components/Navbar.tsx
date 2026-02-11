@@ -6,6 +6,7 @@ import { Menu, X } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
+import { useSiteContent } from './SiteContentProvider';
 
 interface NavbarData {
   logo?: string;
@@ -26,7 +27,10 @@ const navLinks = [
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [navbarData, setNavbarData] = useState<NavbarData | null>(null);
+  const siteContent = useSiteContent();
+  const [navbarData, setNavbarData] = useState<NavbarData | null>(
+    (siteContent?.navbar as NavbarData) || null
+  );
   const pathname = usePathname();
 
   useEffect(() => {
@@ -38,6 +42,10 @@ export default function Navbar() {
   }, []);
 
   useEffect(() => {
+    if (siteContent?.navbar) {
+      setNavbarData(siteContent.navbar as NavbarData);
+      return;
+    }
     fetch('/api/content')
       .then(res => res.json())
       .then(content => {
@@ -46,7 +54,7 @@ export default function Navbar() {
         }
       })
       .catch(console.error);
-  }, []);
+  }, [siteContent]);
 
   const logo = navbarData?.logo;
   const title = navbarData?.title || "La cuisine d'Arnaud";

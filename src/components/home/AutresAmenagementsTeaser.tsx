@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { ArrowRight, Bath, Shirt } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useSiteContent } from '../SiteContentProvider';
 
 interface AmenagementItem {
   title: string;
@@ -35,9 +36,17 @@ const defaultItems = [
 ];
 
 export default function AutresAmenagementsTeaser() {
-  const [data, setData] = useState<AmenagementsTeaserData | null>(null);
+  const siteContent = useSiteContent();
+  const [data, setData] = useState<AmenagementsTeaserData | null>(
+    (siteContent?.homepage as Record<string, unknown>)?.autresAmenagementsTeaser as AmenagementsTeaserData || null
+  );
 
   useEffect(() => {
+    if (siteContent?.homepage) {
+      const hp = siteContent.homepage as Record<string, unknown>;
+      if (hp.autresAmenagementsTeaser) setData(hp.autresAmenagementsTeaser as AmenagementsTeaserData);
+      return;
+    }
     fetch('/api/content')
       .then(res => res.json())
       .then(content => {
@@ -46,7 +55,7 @@ export default function AutresAmenagementsTeaser() {
         }
       })
       .catch(console.error);
-  }, []);
+  }, [siteContent]);
 
   const title = data?.title || "Pas que";
   const titleHighlight = data?.titleHighlight || "des cuisines";

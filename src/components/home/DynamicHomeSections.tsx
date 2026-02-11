@@ -7,12 +7,22 @@ import AutresAmenagementsTeaser from './AutresAmenagementsTeaser';
 import FournisseursTeaser from './FournisseursTeaser';
 import AvisSectionWrapper from './AvisSectionWrapper';
 import CTAContact from './CTAContact';
+import { useSiteContent } from '../SiteContentProvider';
 
 interface SectionConfig {
   id: string;
   label: string;
   enabled: boolean;
 }
+
+const DEFAULT_SECTIONS: SectionConfig[] = [
+  { id: 'cuisines', label: 'Cuisines', enabled: true },
+  { id: 'realisations', label: 'Réalisations', enabled: true },
+  { id: 'autresAmenagements', label: 'Autres Aménagements', enabled: true },
+  { id: 'fournisseurs', label: 'Fournisseurs', enabled: true },
+  { id: 'avis', label: 'Avis Houzz', enabled: true },
+  { id: 'cta', label: 'CTA Contact', enabled: true },
+];
 
 const SECTION_COMPONENTS: Record<string, React.ComponentType> = {
   cuisines: CuisineTeaser,
@@ -24,38 +34,26 @@ const SECTION_COMPONENTS: Record<string, React.ComponentType> = {
 };
 
 export default function DynamicHomeSections() {
-  const [sections, setSections] = useState<SectionConfig[]>([]);
-  const [loading, setLoading] = useState(true);
+  const siteContent = useSiteContent();
+  const initialSections = (siteContent?.homepage as Record<string, unknown>)?.sectionsOrder as SectionConfig[] || null;
+  const [sections, setSections] = useState<SectionConfig[]>(initialSections || []);
+  const [loading, setLoading] = useState(!initialSections);
 
   useEffect(() => {
+    if (siteContent) {
+      const order = (siteContent.homepage as Record<string, unknown>)?.sectionsOrder as SectionConfig[];
+      setSections(order || DEFAULT_SECTIONS);
+      setLoading(false);
+      return;
+    }
     fetch('/api/content')
       .then(res => res.json())
       .then(content => {
-        if (content.homepage?.sectionsOrder) {
-          setSections(content.homepage.sectionsOrder);
-        } else {
-          // Ordre par défaut si non configuré
-          setSections([
-            { id: 'cuisines', label: 'Cuisines', enabled: true },
-            { id: 'realisations', label: 'Réalisations', enabled: true },
-            { id: 'autresAmenagements', label: 'Autres Aménagements', enabled: true },
-            { id: 'fournisseurs', label: 'Fournisseurs', enabled: true },
-            { id: 'avis', label: 'Avis Houzz', enabled: true },
-            { id: 'cta', label: 'CTA Contact', enabled: true },
-          ]);
-        }
+        setSections(content.homepage?.sectionsOrder || DEFAULT_SECTIONS);
         setLoading(false);
       })
       .catch(() => {
-        // Fallback en cas d'erreur
-        setSections([
-          { id: 'cuisines', label: 'Cuisines', enabled: true },
-          { id: 'realisations', label: 'Réalisations', enabled: true },
-          { id: 'autresAmenagements', label: 'Autres Aménagements', enabled: true },
-          { id: 'fournisseurs', label: 'Fournisseurs', enabled: true },
-          { id: 'avis', label: 'Avis Houzz', enabled: true },
-          { id: 'cta', label: 'CTA Contact', enabled: true },
-        ]);
+        setSections(DEFAULT_SECTIONS);
         setLoading(false);
       });
   }, []);

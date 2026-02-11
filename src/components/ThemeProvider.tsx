@@ -2,6 +2,7 @@
 
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 import { ColorPalette, getPaletteById, COLOR_PALETTES } from '@/lib/colorPalettes';
+import { useSiteContent } from './SiteContentProvider';
 
 interface ThemeContextType {
   palette: ColorPalette;
@@ -11,11 +12,22 @@ interface ThemeContextType {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [palette, setPalette] = useState<ColorPalette>(COLOR_PALETTES[0]);
-  const [loaded, setLoaded] = useState(false);
+  const siteContent = useSiteContent();
+  const initialPalette = siteContent?.theme?.paletteId
+    ? getPaletteById(siteContent.theme.paletteId)
+    : COLOR_PALETTES[0];
+  const [palette, setPalette] = useState<ColorPalette>(initialPalette);
+  const [loaded, setLoaded] = useState(!!siteContent);
 
   useEffect(() => {
-    // Charger la palette depuis l'API
+    if (siteContent) {
+      if (siteContent.theme?.paletteId) {
+        setPalette(getPaletteById(siteContent.theme.paletteId));
+      }
+      setLoaded(true);
+      return;
+    }
+    // Fallback: charger depuis l'API si pas de contexte
     fetch('/api/content')
       .then(res => res.json())
       .then(content => {
@@ -25,7 +37,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
         setLoaded(true);
       })
       .catch(() => setLoaded(true));
-  }, []);
+  }, [siteContent]);
 
   useEffect(() => {
     if (!loaded) return;

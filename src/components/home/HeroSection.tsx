@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import { useSiteContent } from '../SiteContentProvider';
 
 interface HeroData {
   videoUrl?: string;
@@ -16,9 +17,16 @@ interface HeroData {
 }
 
 export default function HeroSection() {
-  const [data, setData] = useState<HeroData | null>(null);
+  const siteContent = useSiteContent();
+  const [data, setData] = useState<HeroData | null>(
+    (siteContent?.hero as HeroData) || null
+  );
 
   useEffect(() => {
+    if (siteContent?.hero) {
+      setData(siteContent.hero as HeroData);
+      return;
+    }
     fetch('/api/content')
       .then(res => res.json())
       .then(content => {
@@ -27,7 +35,7 @@ export default function HeroSection() {
         }
       })
       .catch(console.error);
-  }, []);
+  }, [siteContent]);
 
   const videoUrl = data?.videoUrl;
   const backgroundImage = data?.backgroundImage;

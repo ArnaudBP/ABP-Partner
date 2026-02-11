@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { Phone, Mail, MapPin } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useSiteContent } from '../SiteContentProvider';
 
 interface CTASectionData {
   title?: string;
@@ -17,10 +18,21 @@ interface CTASectionData {
 }
 
 export default function CTAContact() {
-  const [data, setData] = useState<CTASectionData | null>(null);
-  const [contact, setContact] = useState<{phone?: string; email?: string; address?: string} | null>(null);
+  const siteContent = useSiteContent();
+  const [data, setData] = useState<CTASectionData | null>(
+    (siteContent?.homepage as Record<string, unknown>)?.ctaSection as CTASectionData || null
+  );
+  const [contact, setContact] = useState<{phone?: string; email?: string; address?: string} | null>(
+    (siteContent?.contact as {phone?: string; email?: string; address?: string}) || null
+  );
 
   useEffect(() => {
+    if (siteContent) {
+      const hp = siteContent.homepage as Record<string, unknown>;
+      if (hp?.ctaSection) setData(hp.ctaSection as CTASectionData);
+      if (siteContent.contact) setContact(siteContent.contact as {phone?: string; email?: string; address?: string});
+      return;
+    }
     fetch('/api/content')
       .then(res => res.json())
       .then(content => {
@@ -32,7 +44,7 @@ export default function CTAContact() {
         }
       })
       .catch(console.error);
-  }, []);
+  }, [siteContent]);
 
   const title = data?.title || "Envie d'en";
   const titleHighlight = data?.titleHighlight || "discuter ?";

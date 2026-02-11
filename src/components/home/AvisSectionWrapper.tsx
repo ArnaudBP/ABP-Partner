@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import AvisSection from "./AvisSection";
+import { useSiteContent } from '../SiteContentProvider';
 
 interface AvisSectionData {
   houzzProfileUrl: string;
@@ -10,9 +11,17 @@ interface AvisSectionData {
 }
 
 export default function AvisSectionWrapper() {
-  const [data, setData] = useState<AvisSectionData | null>(null);
+  const siteContent = useSiteContent();
+  const [data, setData] = useState<AvisSectionData | null>(
+    (siteContent?.homepage as Record<string, unknown>)?.avisSection as AvisSectionData || null
+  );
 
   useEffect(() => {
+    if (siteContent?.homepage) {
+      const hp = siteContent.homepage as Record<string, unknown>;
+      if (hp.avisSection) setData(hp.avisSection as AvisSectionData);
+      return;
+    }
     fetch('/api/content')
       .then(res => res.json())
       .then(content => {
@@ -21,7 +30,7 @@ export default function AvisSectionWrapper() {
         }
       })
       .catch(console.error);
-  }, []);
+  }, [siteContent]);
 
   if (!data) {
     return null;

@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { ArrowRight, Home, Award, Euro, Ruler, Palette, Wrench, Star } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useSiteContent } from '../SiteContentProvider';
 
 interface Feature {
   icon: string;
@@ -53,9 +54,17 @@ const defaultFeatures = [
 ];
 
 export default function CuisineTeaser() {
-  const [data, setData] = useState<CuisinesTeaserData | null>(null);
+  const siteContent = useSiteContent();
+  const [data, setData] = useState<CuisinesTeaserData | null>(
+    (siteContent?.homepage as Record<string, unknown>)?.cuisinesTeaser as CuisinesTeaserData || null
+  );
 
   useEffect(() => {
+    if (siteContent?.homepage) {
+      const hp = siteContent.homepage as Record<string, unknown>;
+      if (hp.cuisinesTeaser) setData(hp.cuisinesTeaser as CuisinesTeaserData);
+      return;
+    }
     fetch('/api/content')
       .then(res => res.json())
       .then(content => {
@@ -64,7 +73,7 @@ export default function CuisineTeaser() {
         }
       })
       .catch(console.error);
-  }, []);
+  }, [siteContent]);
 
   const title = data?.title || "Pourquoi travailler";
   const titleHighlight = data?.titleHighlight || "avec moi ?";
