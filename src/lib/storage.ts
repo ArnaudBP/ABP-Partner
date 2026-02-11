@@ -60,7 +60,7 @@ async function readJsonFromBlob<T>(filename: string, defaultValue: T): Promise<T
       }
     }
 
-    const response = await fetch(blob.url);
+    const response = await fetch(blob.url, { cache: 'no-store' });
     const content = await response.json();
     return content as T;
   } catch (error) {

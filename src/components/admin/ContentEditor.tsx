@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { 
   Save, 
   ChevronDown, 
@@ -49,6 +50,7 @@ export default function ContentEditor() {
   const [activeTab, setActiveTab] = useState('hero');
 
   const [saveError, setSaveError] = useState<string | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
     fetch('/api/content')
@@ -78,6 +80,7 @@ export default function ContentEditor() {
       }
       
       setSaved(true);
+      router.refresh();
       setTimeout(() => setSaved(false), 2000);
     } catch (error) {
       console.error('Error saving content:', error);

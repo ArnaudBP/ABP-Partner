@@ -75,12 +75,13 @@ export default function AdminDashboard() {
       if (msgsRes.ok) {
         setMessages(await msgsRes.json());
       }
+      router.refresh();
     } catch (error) {
       console.error('Error fetching data:', error);
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [router]);
 
   useEffect(() => {
     // Check authentication
@@ -294,6 +295,7 @@ function DashboardTab({ realisations, fournisseurs, messages }: {
 
 // Page Editor pour Cuisines - COMPLET avec Preview
 function PageEditorCuisines() {
+  const router = useRouter();
   const [activeSection, setActiveSection] = useState<'hero' | 'expertise' | 'styles' | 'process' | 'cta'>('hero');
   const [content, setContent] = useState({
     // Hero
@@ -388,6 +390,7 @@ function PageEditorCuisines() {
         body: JSON.stringify({ ...allContent, pageCuisines: content }),
       });
       setSaved(true);
+      router.refresh();
       setTimeout(() => setSaved(false), 2000);
     } catch (error) {
       console.error('Error:', error);
@@ -1065,6 +1068,7 @@ function PageEditorCuisines() {
 
 // Page Editor pour Salles de Bains - COMPLET avec Preview
 function PageEditorSallesDeBains() {
+  const router = useRouter();
   const [activeSection, setActiveSection] = useState<'hero' | 'features' | 'services'>('hero');
   const [content, setContent] = useState({
     hero: {
@@ -1126,6 +1130,7 @@ function PageEditorSallesDeBains() {
         body: JSON.stringify({ ...allContent, pageSallesDeBains: content }),
       });
       setSaved(true);
+      router.refresh();
       setTimeout(() => setSaved(false), 2000);
     } catch (error) {
       console.error('Error:', error);
@@ -1436,6 +1441,7 @@ function PageEditorSallesDeBains() {
 
 // Page Editor pour Dressings - COMPLET avec Preview
 function PageEditorDressings() {
+  const router = useRouter();
   const [activeSection, setActiveSection] = useState<'hero' | 'features' | 'configurations'>('hero');
   const [content, setContent] = useState({
     hero: {
@@ -1492,6 +1498,7 @@ function PageEditorDressings() {
         body: JSON.stringify({ ...allContent, pageDressings: content }),
       });
       setSaved(true);
+      router.refresh();
       setTimeout(() => setSaved(false), 2000);
     } catch (error) {
       console.error('Error:', error);
@@ -1796,6 +1803,7 @@ function PageEditorDressings() {
 
 // Page Contact Editor
 function PageEditorContact() {
+  const router = useRouter();
   const [activeSection, setActiveSection] = useState<'header' | 'coordonnees' | 'formulaire' | 'succes'>('header');
   const [content, setContent] = useState({
     headerAccroche: "Parlons-en",
@@ -1840,6 +1848,7 @@ function PageEditorContact() {
         body: JSON.stringify({ ...allContent, pageContact: content }),
       });
       setSaved(true);
+      router.refresh();
       setTimeout(() => setSaved(false), 2000);
     } catch (error) {
       console.error('Error:', error);
@@ -2083,6 +2092,7 @@ function PageEditorContact() {
 
 // Footer Editor
 function PageEditorFooter() {
+  const router = useRouter();
   const [activeSection, setActiveSection] = useState<'marque' | 'social' | 'legal'>('marque');
   const [content, setContent] = useState({
     brandName: "ABP Partner",
@@ -2127,6 +2137,7 @@ function PageEditorFooter() {
         body: JSON.stringify({ ...allContent, footer: content }),
       });
       setSaved(true);
+      router.refresh();
       setTimeout(() => setSaved(false), 2000);
     } catch (error) {
       console.error('Error:', error);
@@ -3172,6 +3183,7 @@ function MessagesTab({ messages, onUpdate }: { messages: ContactSubmission[]; on
 
 // Settings Tab
 function SettingsTab() {
+  const router = useRouter();
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -3205,6 +3217,7 @@ function SettingsTab() {
         body: JSON.stringify({ ...allContent, theme: { ...allContent.theme, paletteId: newPaletteId } }),
       });
       setPaletteSaved(true);
+      router.refresh();
       setTimeout(() => setPaletteSaved(false), 2000);
     } catch (error) {
       console.error('Error:', error);
