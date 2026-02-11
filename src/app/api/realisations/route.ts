@@ -3,6 +3,8 @@ import { getRealisations, saveRealisation, deleteRealisation } from '@/lib/data'
 import { isAuthenticated } from '@/lib/auth';
 import { Realisation } from '@/types';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);

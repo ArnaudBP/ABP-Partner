@@ -3,6 +3,8 @@ import { getFournisseurs, saveFournisseur, deleteFournisseur } from '@/lib/data'
 import { isAuthenticated } from '@/lib/auth';
 import { Fournisseur } from '@/types';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET() {
   try {
     const fournisseurs = await getFournisseurs();

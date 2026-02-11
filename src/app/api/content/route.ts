@@ -3,10 +3,16 @@ import { getSiteContent, updateSiteContent } from '@/lib/data';
 import { isAuthenticated } from '@/lib/auth';
 import { SiteContent } from '@/types';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET() {
   try {
     const content = await getSiteContent();
-    return NextResponse.json(content);
+    return NextResponse.json(content, {
+      headers: {
+        'Cache-Control': 'no-store, no-cache, must-revalidate',
+      },
+    });
   } catch (error) {
     console.error('Error fetching site content:', error);
     return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 });
