@@ -48,6 +48,8 @@ export default function ContentEditor() {
   const [saved, setSaved] = useState(false);
   const [activeTab, setActiveTab] = useState('hero');
 
+  const [saveError, setSaveError] = useState<string | null>(null);
+
   useEffect(() => {
     fetch('/api/content')
       .then(res => res.json())
@@ -62,16 +64,24 @@ export default function ContentEditor() {
     if (!content) return;
     
     setSaving(true);
+    setSaveError(null);
     try {
-      await fetch('/api/content', {
+      const res = await fetch('/api/content', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(content),
       });
+      
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        throw new Error(data.error || `Erreur ${res.status}`);
+      }
+      
       setSaved(true);
       setTimeout(() => setSaved(false), 2000);
     } catch (error) {
       console.error('Error saving content:', error);
+      setSaveError(error instanceof Error ? error.message : 'Erreur lors de la sauvegarde');
     } finally {
       setSaving(false);
     }
@@ -151,6 +161,11 @@ export default function ContentEditor() {
               {saving ? 'Sauvegarde...' : saved ? 'Sauvegardé !' : 'Sauvegarder'}
             </button>
           </div>
+          {saveError && (
+            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-2 rounded-lg text-sm">
+              ⚠️ Erreur : {saveError}
+            </div>
+          )}
         </div>
       </div>
 
