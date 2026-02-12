@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getContactSubmissions, saveContactSubmission, markContactAsRead, deleteContactSubmission } from '@/lib/data';
 import { isAuthenticated } from '@/lib/auth';
 import { ContactSubmission } from '@/types';
+import { sendContactNotification } from '@/lib/email';
 import { v4 as uuidv4 } from 'uuid';
 import { revalidatePath } from 'next/cache';
 
@@ -34,6 +35,15 @@ export async function POST(request: NextRequest) {
     };
     
     await saveContactSubmission(submission);
+
+    // Envoyer la notification par email (non-bloquant)
+    sendContactNotification({
+      name: data.name || 'Inconnu',
+      email: data.email || '',
+      phone: data.phone,
+      subject: data.subject,
+      message: data.message || '',
+    }).catch((err) => console.error('Erreur envoi email:', err));
     
     revalidatePath('/', 'layout');
     return NextResponse.json({ success: true, message: 'Message envoyé avec succès' });
