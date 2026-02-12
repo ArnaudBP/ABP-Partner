@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { revalidatePath } from 'next/cache';
-import { getFournisseurs, saveFournisseur, deleteFournisseur } from '@/lib/data';
+import { getFournisseurs, saveFournisseur, deleteFournisseur, reorderFournisseurs } from '@/lib/data';
 import { isAuthenticated } from '@/lib/auth';
 import { Fournisseur } from '@/types';
 
@@ -57,6 +57,28 @@ export async function DELETE(request: NextRequest) {
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error('Error deleting fournisseur:', error);
+    return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 });
+  }
+}
+
+export async function PATCH(request: NextRequest) {
+  try {
+    const authenticated = await isAuthenticated();
+    if (!authenticated) {
+      return NextResponse.json({ error: 'Non autorisé' }, { status: 401 });
+    }
+    
+    const { orderedIds } = await request.json();
+    if (!orderedIds || !Array.isArray(orderedIds)) {
+      return NextResponse.json({ error: 'Liste d\'IDs invalide' }, { status: 400 });
+    }
+    
+    await reorderFournisseurs(orderedIds);
+    
+    revalidatePath('/', 'layout');
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    console.error('Error reordering fournisseurs:', error);
     return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 });
   }
 }

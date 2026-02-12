@@ -38,6 +38,15 @@ export async function deleteRealisation(id: string): Promise<void> {
   await writeJson('realisations.json', filtered);
 }
 
+export async function reorderRealisations(orderedIds: string[]): Promise<void> {
+  const realisations = await getRealisations();
+  for (let i = 0; i < orderedIds.length; i++) {
+    const r = realisations.find(x => x.id === orderedIds[i]);
+    if (r) r.order = i;
+  }
+  await writeJson('realisations.json', realisations);
+}
+
 // Fournisseurs
 export async function getFournisseurs(): Promise<Fournisseur[]> {
   return readJson<Fournisseur[]>('fournisseurs.json', []);
@@ -63,6 +72,15 @@ export async function deleteFournisseur(id: string): Promise<void> {
   const fournisseurs = await getFournisseurs();
   const filtered = fournisseurs.filter(f => f.id !== id);
   await writeJson('fournisseurs.json', filtered);
+}
+
+export async function reorderFournisseurs(orderedIds: string[]): Promise<void> {
+  const fournisseurs = await getFournisseurs();
+  for (let i = 0; i < orderedIds.length; i++) {
+    const f = fournisseurs.find(x => x.id === orderedIds[i]);
+    if (f) f.order = i;
+  }
+  await writeJson('fournisseurs.json', fournisseurs);
 }
 
 // Catalogues

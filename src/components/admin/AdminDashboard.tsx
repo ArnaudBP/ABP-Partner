@@ -2349,6 +2349,7 @@ function PageEditorFooter() {
 
 // Realisations Tab
 function RealisationsTab({ realisations, onUpdate }: { realisations: Realisation[]; onUpdate: () => void }) {
+  const saveBar = useSaveBar();
   const [editing, setEditing] = useState<Realisation | null>(null);
   const [isNew, setIsNew] = useState(false);
   const [orderedRealisations, setOrderedRealisations] = useState<Realisation[]>([]);
@@ -2385,33 +2386,51 @@ function RealisationsTab({ realisations, onUpdate }: { realisations: Realisation
   const handleSave = async () => {
     if (!editing) return;
     
+    const slugify = (text: string) => text.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+    
     const data = {
       ...editing,
-      id: editing.id || editing.title.toLowerCase().replace(/\s+/g, '-'),
-      slug: editing.slug || editing.title.toLowerCase().replace(/\s+/g, '-'),
+      id: editing.id || slugify(editing.title),
+      slug: editing.slug || slugify(editing.title),
     };
 
-    await fetch('/api/realisations', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data),
-    });
+    saveBar.showSaving();
+    try {
+      const res = await fetch('/api/realisations', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+      if (!res.ok) throw new Error('Erreur serveur');
 
-    setEditing(null);
-    setIsNew(false);
-    onUpdate();
+      setEditing(null);
+      setIsNew(false);
+      onUpdate();
+      saveBar.showSaved('R\u00e9alisation enregistr\u00e9e !', { url: `/realisations/${data.slug}`, label: 'Voir la r\u00e9alisation' });
+    } catch (error) {
+      console.error('Error:', error);
+      saveBar.showError('Erreur lors de la sauvegarde de la r\u00e9alisation');
+    }
   };
 
   const handleDelete = async (id: string) => {
     if (!confirm('Supprimer cette réalisation ?')) return;
     
-    await fetch('/api/realisations', {
-      method: 'DELETE',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ id }),
-    });
+    saveBar.showSaving();
+    try {
+      const res = await fetch('/api/realisations', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id }),
+      });
+      if (!res.ok) throw new Error('Erreur serveur');
 
-    onUpdate();
+      onUpdate();
+      saveBar.showSaved('Réalisation supprimée');
+    } catch (error) {
+      console.error('Error:', error);
+      saveBar.showError('Erreur lors de la suppression');
+    }
   };
 
   const moveItem = (index: number, direction: 'up' | 'down') => {
@@ -2426,20 +2445,21 @@ function RealisationsTab({ realisations, onUpdate }: { realisations: Realisation
 
   const saveOrder = async () => {
     setSavingOrder(true);
+    saveBar.showSaving();
     try {
-      // Mettre à jour l'ordre de chaque réalisation
-      for (let i = 0; i < orderedRealisations.length; i++) {
-        const real = orderedRealisations[i];
-        await fetch('/api/realisations', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ ...real, order: i }),
-        });
-      }
+      const orderedIds = orderedRealisations.map(r => r.id);
+      const res = await fetch('/api/realisations', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ orderedIds }),
+      });
+      if (!res.ok) throw new Error('Erreur serveur');
       setIsReordering(false);
       onUpdate();
+      saveBar.showSaved('Ordre des réalisations enregistré !', { url: '/realisations', label: 'Voir les réalisations' });
     } catch (error) {
       console.error('Error saving order:', error);
+      saveBar.showError("Erreur lors de la sauvegarde de l'ordre");
     } finally {
       setSavingOrder(false);
     }
@@ -2771,6 +2791,7 @@ function RealisationForm({ realisation, onChange, onSave, onCancel, isNew }: {
 
 // Fournisseurs Tab
 function FournisseursTab({ fournisseurs, onUpdate }: { fournisseurs: Fournisseur[]; onUpdate: () => void }) {
+  const saveBar = useSaveBar();
   const [editing, setEditing] = useState<Fournisseur | null>(null);
   const [isNew, setIsNew] = useState(false);
   const [orderedFournisseurs, setOrderedFournisseurs] = useState<Fournisseur[]>([]);
@@ -2810,19 +2831,21 @@ function FournisseursTab({ fournisseurs, onUpdate }: { fournisseurs: Fournisseur
 
   const saveOrder = async () => {
     setSavingOrder(true);
+    saveBar.showSaving();
     try {
-      for (let i = 0; i < orderedFournisseurs.length; i++) {
-        const f = orderedFournisseurs[i];
-        await fetch('/api/fournisseurs', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ ...f, order: i }),
-        });
-      }
+      const orderedIds = orderedFournisseurs.map(f => f.id);
+      const res = await fetch('/api/fournisseurs', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ orderedIds }),
+      });
+      if (!res.ok) throw new Error('Erreur serveur');
       setIsReordering(false);
       onUpdate();
+      saveBar.showSaved('Ordre des partenaires enregistré !', { url: '/fournisseurs', label: 'Voir les partenaires' });
     } catch (error) {
       console.error('Error saving order:', error);
+      saveBar.showError("Erreur lors de la sauvegarde de l'ordre");
     } finally {
       setSavingOrder(false);
     }
@@ -2831,32 +2854,50 @@ function FournisseursTab({ fournisseurs, onUpdate }: { fournisseurs: Fournisseur
   const handleSave = async () => {
     if (!editing) return;
     
+    const slugify = (text: string) => text.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+    
     const data = {
       ...editing,
-      id: editing.id || editing.name.toLowerCase().replace(/\s+/g, '-'),
+      id: editing.id || slugify(editing.name),
     };
 
-    await fetch('/api/fournisseurs', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data),
-    });
+    saveBar.showSaving();
+    try {
+      const res = await fetch('/api/fournisseurs', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+      if (!res.ok) throw new Error('Erreur serveur');
 
-    setEditing(null);
-    setIsNew(false);
-    onUpdate();
+      setEditing(null);
+      setIsNew(false);
+      onUpdate();
+      saveBar.showSaved('Partenaire enregistré !', { url: '/fournisseurs', label: 'Voir les partenaires' });
+    } catch (error) {
+      console.error('Error:', error);
+      saveBar.showError('Erreur lors de la sauvegarde du partenaire');
+    }
   };
 
   const handleDelete = async (id: string) => {
     if (!confirm('Supprimer ce partenaire ?') ) return;
     
-    await fetch('/api/fournisseurs', {
-      method: 'DELETE',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ id }),
-    });
+    saveBar.showSaving();
+    try {
+      const res = await fetch('/api/fournisseurs', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id }),
+      });
+      if (!res.ok) throw new Error('Erreur serveur');
 
-    onUpdate();
+      onUpdate();
+      saveBar.showSaved('Partenaire supprimé');
+    } catch (error) {
+      console.error('Error:', error);
+      saveBar.showError('Erreur lors de la suppression');
+    }
   };
 
   if (editing) {
@@ -3083,28 +3124,41 @@ function FournisseursTab({ fournisseurs, onUpdate }: { fournisseurs: Fournisseur
 
 // Messages Tab
 function MessagesTab({ messages, onUpdate }: { messages: ContactSubmission[]; onUpdate: () => void }) {
+  const saveBar = useSaveBar();
   const [selected, setSelected] = useState<ContactSubmission | null>(null);
 
   const handleMarkAsRead = async (id: string) => {
-    await fetch('/api/contact', {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ id, action: 'markAsRead' }),
-    });
-    onUpdate();
+    try {
+      await fetch('/api/contact', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id, action: 'markAsRead' }),
+      });
+      onUpdate();
+    } catch (error) {
+      console.error('Error:', error);
+    }
   };
 
   const handleDelete = async (id: string) => {
     if (!confirm('Supprimer ce message ?')) return;
     
-    await fetch('/api/contact', {
-      method: 'DELETE',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ id }),
-    });
+    saveBar.showSaving();
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id }),
+      });
+      if (!res.ok) throw new Error('Erreur serveur');
 
-    if (selected?.id === id) setSelected(null);
-    onUpdate();
+      if (selected?.id === id) setSelected(null);
+      onUpdate();
+      saveBar.showSaved('Message supprimé');
+    } catch (error) {
+      console.error('Error:', error);
+      saveBar.showError('Erreur lors de la suppression du message');
+    }
   };
 
   return (
@@ -3419,11 +3473,8 @@ function SettingsTab() {
         <p className="text-sm text-gray-600 mb-2">
           <strong>Identifiant :</strong> admin
         </p>
-        <p className="text-sm text-gray-600 mb-2">
-          <strong>Mot de passe par défaut :</strong> abp2024
-        </p>
         <p className="text-sm text-gray-500 mt-4">
-          Pensez à changer le mot de passe par défaut après la première connexion.
+          Pensez à modifier régulièrement votre mot de passe.
         </p>
       </div>
     </div>
