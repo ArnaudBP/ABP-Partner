@@ -2,6 +2,7 @@
 
 import { useState, useRef } from "react";
 import { Upload, X, Loader2, GripVertical } from "lucide-react";
+import { upload as blobUpload } from "@vercel/blob/client";
 
 interface MultiImageUploadProps {
   images: string[];
@@ -38,25 +39,39 @@ export default function MultiImageUpload({
         continue;
       }
 
+      const timestamp = Date.now();
+      const safeName = file.name.replace(/[^a-zA-Z0-9.-]/g, '_');
+      const pathname = folder ? `${folder}/${timestamp}-${safeName}` : `${timestamp}-${safeName}`;
+
       try {
-        const formData = new FormData();
-        formData.append("file", file);
-        formData.append("folder", folder);
-
-        const response = await fetch("/api/upload", {
-          method: "POST",
-          body: formData,
+        // Upload direct vers Vercel Blob
+        const blob = await blobUpload(pathname, file, {
+          access: 'public',
+          handleUploadUrl: '/api/upload/client',
         });
+        newImages.push(blob.url);
+      } catch {
+        // Fallback : upload serveur (dev local)
+        try {
+          const formData = new FormData();
+          formData.append("file", file);
+          formData.append("folder", folder);
 
-        if (!response.ok) {
-          throw new Error(`Erreur upload ${file.name}`);
+          const response = await fetch("/api/upload", {
+            method: "POST",
+            body: formData,
+          });
+
+          if (!response.ok) {
+            throw new Error(`Erreur upload ${file.name}`);
+          }
+
+          const data = await response.json();
+          newImages.push(data.path);
+        } catch (err) {
+          console.error(err);
+          setError(`Erreur lors de l'upload de ${file.name}`);
         }
-
-        const data = await response.json();
-        newImages.push(data.path);
-      } catch (err) {
-        console.error(err);
-        setError(`Erreur lors de l'upload de ${file.name}`);
       }
     }
 

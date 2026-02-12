@@ -2,6 +2,7 @@
 
 import { useState, useRef } from "react";
 import { Upload, X, File, Image, Loader2, Video, AlertCircle } from "lucide-react";
+import { upload as blobUpload } from "@vercel/blob/client";
 
 interface FileUploadProps {
   onUpload: (url: string) => void;
@@ -48,48 +49,70 @@ export default function FileUpload({
     setError(null);
     setUploadProgress(0);
 
-    try {
-      const formData = new FormData();
-      formData.append("file", file);
-      formData.append("folder", folder);
+    // Nom de fichier sécurisé
+    const timestamp = Date.now();
+    const safeName = file.name.replace(/[^a-zA-Z0-9.-]/g, '_');
+    const pathname = folder ? `${folder}/${timestamp}-${safeName}` : `${timestamp}-${safeName}`;
 
-      // Utiliser XMLHttpRequest pour suivre la progression
-      const xhr = new XMLHttpRequest();
-      
-      const uploadPromise = new Promise<{path: string}>((resolve, reject) => {
-        xhr.upload.addEventListener('progress', (e) => {
-          if (e.lengthComputable) {
-            setUploadProgress(Math.round((e.loaded / e.total) * 100));
-          }
-        });
-        
-        xhr.addEventListener('load', () => {
-          if (xhr.status >= 200 && xhr.status < 300) {
-            resolve(JSON.parse(xhr.responseText));
-          } else {
-            reject(new Error('Erreur upload'));
-          }
-        });
-        
-        xhr.addEventListener('error', () => reject(new Error('Erreur réseau')));
-        xhr.open('POST', '/api/upload');
-        xhr.send(formData);
+    try {
+      // Upload direct vers Vercel Blob (contourne la limite 4.5 Mo serverless)
+      const blob = await blobUpload(pathname, file, {
+        access: 'public',
+        handleUploadUrl: '/api/upload/client',
+        onUploadProgress: ({ percentage }) => {
+          setUploadProgress(Math.round(percentage));
+        },
       });
 
-      const data = await uploadPromise;
-      
-      if (isImage) {
-        setPreview(data.path);
-      } else if (isVideo) {
-        setPreview(data.path);
+      if (isImage || isVideo) {
+        setPreview(blob.url);
       } else {
         setPreview(file.name);
       }
       
-      onUpload(data.path);
-    } catch (err) {
-      setError("Erreur lors de l'upload du fichier");
-      console.error(err);
+      onUpload(blob.url);
+    } catch {
+      // Fallback : upload serveur (dev local sans Blob)
+      try {
+        const formData = new FormData();
+        formData.append("file", file);
+        formData.append("folder", folder);
+
+        const xhr = new XMLHttpRequest();
+        
+        const uploadPromise = new Promise<{path: string}>((resolve, reject) => {
+          xhr.upload.addEventListener('progress', (e) => {
+            if (e.lengthComputable) {
+              setUploadProgress(Math.round((e.loaded / e.total) * 100));
+            }
+          });
+          
+          xhr.addEventListener('load', () => {
+            if (xhr.status >= 200 && xhr.status < 300) {
+              resolve(JSON.parse(xhr.responseText));
+            } else {
+              reject(new Error('Erreur upload'));
+            }
+          });
+          
+          xhr.addEventListener('error', () => reject(new Error('Erreur réseau')));
+          xhr.open('POST', '/api/upload');
+          xhr.send(formData);
+        });
+
+        const data = await uploadPromise;
+        
+        if (isImage || isVideo) {
+          setPreview(data.path);
+        } else {
+          setPreview(file.name);
+        }
+        
+        onUpload(data.path);
+      } catch (err) {
+        setError("Erreur lors de l'upload du fichier");
+        console.error(err);
+      }
     } finally {
       setUploading(false);
       setUploadProgress(0);
