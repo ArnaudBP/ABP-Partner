@@ -35,6 +35,7 @@ import FileUpload from "./FileUpload";
 import MultiImageUpload from "./MultiImageUpload";
 import ContentEditor from "./ContentEditor";
 import FileCleanup from "./FileCleanup";
+import { SaveBarProvider, useSaveBar } from "./SaveBarProvider";
 import { Phone, Mail } from "lucide-react";
 
 type Tab = 'dashboard' | 'accueil' | 'cuisines' | 'salles-de-bains' | 'dressings' | 'contact' | 'footer' | 'realisations' | 'fournisseurs' | 'messages' | 'settings';
@@ -54,6 +55,14 @@ const tabs = [
 ];
 
 export default function AdminDashboard() {
+  return (
+    <SaveBarProvider>
+      <AdminDashboardInner />
+    </SaveBarProvider>
+  );
+}
+
+function AdminDashboardInner() {
   const [activeTab, setActiveTab] = useState<Tab>('dashboard');
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [loading, setLoading] = useState(true);
@@ -75,7 +84,6 @@ export default function AdminDashboard() {
       if (msgsRes.ok) {
         setMessages(await msgsRes.json());
       }
-      router.refresh();
     } catch (error) {
       console.error('Error fetching data:', error);
     } finally {
@@ -295,7 +303,7 @@ function DashboardTab({ realisations, fournisseurs, messages }: {
 
 // Page Editor pour Cuisines - COMPLET avec Preview
 function PageEditorCuisines() {
-  const router = useRouter();
+  const saveBar = useSaveBar();
   const [activeSection, setActiveSection] = useState<'hero' | 'expertise' | 'styles' | 'process' | 'cta'>('hero');
   const [content, setContent] = useState({
     // Hero
@@ -381,6 +389,7 @@ function PageEditorCuisines() {
 
   const handleSave = async () => {
     setSaving(true);
+    saveBar.showSaving();
     try {
       const res = await fetch('/api/content');
       const allContent = await res.json();
@@ -390,10 +399,11 @@ function PageEditorCuisines() {
         body: JSON.stringify({ ...allContent, pageCuisines: content }),
       });
       setSaved(true);
-      router.refresh();
+      saveBar.showSaved('Page Cuisines enregistrée !', { url: '/cuisines', label: 'Voir la page Cuisines' });
       setTimeout(() => setSaved(false), 2000);
     } catch (error) {
       console.error('Error:', error);
+      saveBar.showError('Erreur lors de la sauvegarde');
     } finally {
       setSaving(false);
     }
@@ -1068,7 +1078,7 @@ function PageEditorCuisines() {
 
 // Page Editor pour Salles de Bains - COMPLET avec Preview
 function PageEditorSallesDeBains() {
-  const router = useRouter();
+  const saveBar = useSaveBar();
   const [activeSection, setActiveSection] = useState<'hero' | 'features' | 'services'>('hero');
   const [content, setContent] = useState({
     hero: {
@@ -1121,6 +1131,7 @@ function PageEditorSallesDeBains() {
 
   const handleSave = async () => {
     setSaving(true);
+    saveBar.showSaving();
     try {
       const res = await fetch('/api/content');
       const allContent = await res.json();
@@ -1130,10 +1141,11 @@ function PageEditorSallesDeBains() {
         body: JSON.stringify({ ...allContent, pageSallesDeBains: content }),
       });
       setSaved(true);
-      router.refresh();
+      saveBar.showSaved('Page Salles de Bains enregistrée !', { url: '/autres-amenagements/salles-de-bains', label: 'Voir la page' });
       setTimeout(() => setSaved(false), 2000);
     } catch (error) {
       console.error('Error:', error);
+      saveBar.showError('Erreur lors de la sauvegarde');
     } finally {
       setSaving(false);
     }
@@ -1441,7 +1453,7 @@ function PageEditorSallesDeBains() {
 
 // Page Editor pour Dressings - COMPLET avec Preview
 function PageEditorDressings() {
-  const router = useRouter();
+  const saveBar = useSaveBar();
   const [activeSection, setActiveSection] = useState<'hero' | 'features' | 'configurations'>('hero');
   const [content, setContent] = useState({
     hero: {
@@ -1489,6 +1501,7 @@ function PageEditorDressings() {
 
   const handleSave = async () => {
     setSaving(true);
+    saveBar.showSaving();
     try {
       const res = await fetch('/api/content');
       const allContent = await res.json();
@@ -1498,10 +1511,11 @@ function PageEditorDressings() {
         body: JSON.stringify({ ...allContent, pageDressings: content }),
       });
       setSaved(true);
-      router.refresh();
+      saveBar.showSaved('Page Dressings enregistrée !', { url: '/autres-amenagements/dressings', label: 'Voir la page' });
       setTimeout(() => setSaved(false), 2000);
     } catch (error) {
       console.error('Error:', error);
+      saveBar.showError('Erreur lors de la sauvegarde');
     } finally {
       setSaving(false);
     }
@@ -1803,7 +1817,7 @@ function PageEditorDressings() {
 
 // Page Contact Editor
 function PageEditorContact() {
-  const router = useRouter();
+  const saveBar = useSaveBar();
   const [activeSection, setActiveSection] = useState<'header' | 'coordonnees' | 'formulaire' | 'succes'>('header');
   const [content, setContent] = useState({
     headerAccroche: "Parlons-en",
@@ -1839,6 +1853,7 @@ function PageEditorContact() {
 
   const handleSave = async () => {
     setSaving(true);
+    saveBar.showSaving();
     try {
       const res = await fetch('/api/content');
       const allContent = await res.json();
@@ -1848,10 +1863,11 @@ function PageEditorContact() {
         body: JSON.stringify({ ...allContent, pageContact: content }),
       });
       setSaved(true);
-      router.refresh();
+      saveBar.showSaved('Page Contact enregistrée !', { url: '/contact', label: 'Voir la page Contact' });
       setTimeout(() => setSaved(false), 2000);
     } catch (error) {
       console.error('Error:', error);
+      saveBar.showError('Erreur lors de la sauvegarde');
     } finally {
       setSaving(false);
     }
@@ -2092,7 +2108,7 @@ function PageEditorContact() {
 
 // Footer Editor
 function PageEditorFooter() {
-  const router = useRouter();
+  const saveBar = useSaveBar();
   const [activeSection, setActiveSection] = useState<'marque' | 'social' | 'legal'>('marque');
   const [content, setContent] = useState({
     brandName: "ABP Partner",
@@ -2128,6 +2144,7 @@ function PageEditorFooter() {
 
   const handleSave = async () => {
     setSaving(true);
+    saveBar.showSaving();
     try {
       const res = await fetch('/api/content');
       const allContent = await res.json();
@@ -2137,10 +2154,11 @@ function PageEditorFooter() {
         body: JSON.stringify({ ...allContent, footer: content }),
       });
       setSaved(true);
-      router.refresh();
+      saveBar.showSaved('Footer enregistré !', { url: '/#footer', label: 'Voir le footer' });
       setTimeout(() => setSaved(false), 2000);
     } catch (error) {
       console.error('Error:', error);
+      saveBar.showError('Erreur lors de la sauvegarde');
     } finally {
       setSaving(false);
     }
@@ -3183,7 +3201,7 @@ function MessagesTab({ messages, onUpdate }: { messages: ContactSubmission[]; on
 
 // Settings Tab
 function SettingsTab() {
-  const router = useRouter();
+  const saveBar = useSaveBar();
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -3208,6 +3226,7 @@ function SettingsTab() {
   const handleSavePalette = async (newPaletteId: string) => {
     setPaletteId(newPaletteId);
     setPaletteSaving(true);
+    saveBar.showSaving();
     try {
       const res = await fetch('/api/content');
       const allContent = await res.json();
@@ -3217,10 +3236,11 @@ function SettingsTab() {
         body: JSON.stringify({ ...allContent, theme: { ...allContent.theme, paletteId: newPaletteId } }),
       });
       setPaletteSaved(true);
-      router.refresh();
+      saveBar.showSaved('Palette de couleurs appliquée !', { url: '/', label: 'Voir le site' });
       setTimeout(() => setPaletteSaved(false), 2000);
     } catch (error) {
       console.error('Error:', error);
+      saveBar.showError('Erreur lors du changement de palette');
     } finally {
       setPaletteSaving(false);
     }

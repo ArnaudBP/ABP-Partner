@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
 import { 
   Save, 
   ChevronDown, 
@@ -25,6 +24,7 @@ import {
 } from "lucide-react";
 import FileUpload from "./FileUpload";
 import { COLOR_PALETTES } from "@/lib/colorPalettes";
+import { useSaveBar } from "./SaveBarProvider";
 
 interface SiteContent {
   [key: string]: unknown;
@@ -50,7 +50,7 @@ export default function ContentEditor() {
   const [activeTab, setActiveTab] = useState('hero');
 
   const [saveError, setSaveError] = useState<string | null>(null);
-  const router = useRouter();
+  const saveBar = useSaveBar();
 
   useEffect(() => {
     fetch('/api/content')
@@ -67,6 +67,7 @@ export default function ContentEditor() {
     
     setSaving(true);
     setSaveError(null);
+    saveBar.showSaving();
     try {
       const res = await fetch('/api/content', {
         method: 'PUT',
@@ -80,11 +81,13 @@ export default function ContentEditor() {
       }
       
       setSaved(true);
-      router.refresh();
+      saveBar.showSaved('Page d\'accueil enregistrée !', { url: '/', label: 'Voir la page d\'accueil' });
       setTimeout(() => setSaved(false), 2000);
     } catch (error) {
       console.error('Error saving content:', error);
-      setSaveError(error instanceof Error ? error.message : 'Erreur lors de la sauvegarde');
+      const msg = error instanceof Error ? error.message : 'Erreur lors de la sauvegarde';
+      setSaveError(msg);
+      saveBar.showError(msg);
     } finally {
       setSaving(false);
     }
