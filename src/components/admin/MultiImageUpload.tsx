@@ -2,7 +2,7 @@
 
 import { useState, useRef } from "react";
 import { Upload, X, Loader2, GripVertical } from "lucide-react";
-import { upload as blobUpload } from "@vercel/blob/client";
+import { put as blobPut } from "@vercel/blob/client";
 
 interface MultiImageUploadProps {
   images: string[];
@@ -44,14 +44,25 @@ export default function MultiImageUpload({
       const pathname = folder ? `${folder}/${timestamp}-${safeName}` : `${timestamp}-${safeName}`;
 
       try {
-        // Upload direct vers Vercel Blob
-        const blob = await blobUpload(pathname, file, {
+        // Étape 1 : obtenir un client token (fetch avec cookies)
+        const tokenRes = await fetch('/api/upload/client', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ pathname }),
+        });
+
+        if (!tokenRes.ok) throw new Error('Token error');
+        const { clientToken } = await tokenRes.json();
+
+        // Étape 2 : upload direct vers Vercel Blob
+        const blob = await blobPut(pathname, file, {
           access: 'public',
-          handleUploadUrl: '/api/upload/client',
+          token: clientToken,
         });
         newImages.push(blob.url);
-      } catch {
-        // Fallback : upload serveur (dev local)
+      } catch (blobError) {
+        console.warn('Blob upload failed, trying fallback:', blobError);
+        // Fallback : upload serveur (dev local, fichiers < 4 Mo)
         try {
           const formData = new FormData();
           formData.append("file", file);

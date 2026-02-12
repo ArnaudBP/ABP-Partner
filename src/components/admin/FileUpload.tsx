@@ -2,7 +2,7 @@
 
 import { useState, useRef } from "react";
 import { Upload, X, File, Image, Loader2, Video, AlertCircle } from "lucide-react";
-import { upload as blobUpload } from "@vercel/blob/client";
+import { upload as blobUpload, put as blobPut } from "@vercel/blob/client";
 
 interface FileUploadProps {
   onUpload: (url: string) => void;
@@ -55,10 +55,23 @@ export default function FileUpload({
     const pathname = folder ? `${folder}/${timestamp}-${safeName}` : `${timestamp}-${safeName}`;
 
     try {
-      // Upload direct vers Vercel Blob (contourne la limite 4.5 Mo serverless)
-      const blob = await blobUpload(pathname, file, {
+      // Étape 1 : obtenir un client token (fetch normal avec cookies)
+      const tokenRes = await fetch('/api/upload/client', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ pathname }),
+      });
+
+      if (!tokenRes.ok) {
+        throw new Error('Token error');
+      }
+
+      const { clientToken } = await tokenRes.json();
+
+      // Étape 2 : upload direct vers Vercel Blob avec le token
+      const blob = await blobPut(pathname, file, {
         access: 'public',
-        handleUploadUrl: '/api/upload/client',
+        token: clientToken,
         onUploadProgress: ({ percentage }) => {
           setUploadProgress(Math.round(percentage));
         },
@@ -71,8 +84,17 @@ export default function FileUpload({
       }
       
       onUpload(blob.url);
-    } catch {
-      // Fallback : upload serveur (dev local sans Blob)
+    } catch (blobError) {
+      console.warn('Blob upload failed, trying server fallback:', blobError);
+      
+      // Fallback : upload serveur (dev local sans Blob, ou fichiers < 4 Mo)
+      if (sizeMB > 4) {
+        setError("Erreur lors de l'upload. Vérifiez votre connexion et réessayez.");
+        setUploading(false);
+        setUploadProgress(0);
+        return;
+      }
+
       try {
         const formData = new FormData();
         formData.append("file", file);
