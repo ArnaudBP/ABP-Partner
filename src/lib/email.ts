@@ -19,7 +19,7 @@ interface ContactEmailData {
 }
 
 export async function sendContactNotification(data: ContactEmailData): Promise<void> {
-  const to = process.env.CONTACT_EMAIL || 'contact@abp-partner.fr';
+  const to = process.env.CONTACT_EMAIL || 'site@abp-partner.fr';
   const from = process.env.SMTP_USER || 'site@abp-partner.fr';
 
   // Ne pas envoyer si SMTP non configuré
