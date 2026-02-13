@@ -7,7 +7,6 @@ import {
   LayoutDashboard, 
   Image, 
   Truck, 
-  MessageSquare,
   Settings,
   LogOut,
   Menu,
@@ -29,7 +28,7 @@ import {
   GripVertical,
   ExternalLink
 } from "lucide-react";
-import { Realisation, Fournisseur, ContactSubmission } from "@/types";
+import { Realisation, Fournisseur } from "@/types";
 import { COLOR_PALETTES } from "@/lib/colorPalettes";
 import FileUpload from "./FileUpload";
 import MultiImageUpload from "./MultiImageUpload";
@@ -38,7 +37,7 @@ import FileCleanup from "./FileCleanup";
 import { SaveBarProvider, useSaveBar } from "./SaveBarProvider";
 import { Phone, Mail } from "lucide-react";
 
-type Tab = 'dashboard' | 'accueil' | 'cuisines' | 'salles-de-bains' | 'dressings' | 'contact' | 'footer' | 'realisations' | 'fournisseurs' | 'messages' | 'settings';
+type Tab = 'dashboard' | 'accueil' | 'cuisines' | 'salles-de-bains' | 'dressings' | 'contact' | 'footer' | 'realisations' | 'fournisseurs' | 'settings';
 
 const tabs = [
   { id: 'dashboard' as Tab, label: 'Dashboard', icon: LayoutDashboard },
@@ -50,7 +49,6 @@ const tabs = [
   { id: 'footer' as Tab, label: 'Footer', icon: Settings },
   { id: 'realisations' as Tab, label: 'Réalisations', icon: Image },
   { id: 'fournisseurs' as Tab, label: 'Partenaires', icon: Truck },
-  { id: 'messages' as Tab, label: 'Messages', icon: MessageSquare },
   { id: 'settings' as Tab, label: 'Paramètres', icon: Settings },
 ];
 
@@ -68,22 +66,17 @@ function AdminDashboardInner() {
   const [loading, setLoading] = useState(true);
   const [realisations, setRealisations] = useState<Realisation[]>([]);
   const [fournisseurs, setFournisseurs] = useState<Fournisseur[]>([]);
-  const [messages, setMessages] = useState<ContactSubmission[]>([]);
   const router = useRouter();
 
   const fetchData = useCallback(async () => {
     try {
-      const [realsRes, fournsRes, msgsRes] = await Promise.all([
+      const [realsRes, fournsRes] = await Promise.all([
         fetch('/api/realisations'),
         fetch('/api/fournisseurs'),
-        fetch('/api/contact'),
       ]);
       
       setRealisations(await realsRes.json());
       setFournisseurs(await fournsRes.json());
-      if (msgsRes.ok) {
-        setMessages(await msgsRes.json());
-      }
     } catch (error) {
       console.error('Error fetching data:', error);
     } finally {
@@ -109,8 +102,6 @@ function AdminDashboardInner() {
     await fetch("/api/auth/logout", { method: "POST" });
     router.push("/admin");
   };
-
-  const unreadMessages = messages.filter(m => !m.read).length;
 
   if (loading) {
     return (
@@ -151,11 +142,6 @@ function AdminDashboardInner() {
               {sidebarOpen && (
                 <span className="text-sm font-medium">{tab.label}</span>
               )}
-              {tab.id === 'messages' && unreadMessages > 0 && (
-                <span className="ml-auto bg-red-500 text-white text-xs px-2 py-0.5 rounded-full">
-                  {unreadMessages}
-                </span>
-              )}
             </button>
           ))}
         </nav>
@@ -184,7 +170,6 @@ function AdminDashboardInner() {
             <DashboardTab 
               realisations={realisations}
               fournisseurs={fournisseurs}
-              messages={messages}
             />
           )}
           {activeTab === 'accueil' && (
@@ -217,12 +202,6 @@ function AdminDashboardInner() {
               onUpdate={fetchData}
             />
           )}
-          {activeTab === 'messages' && (
-            <MessagesTab 
-              messages={messages}
-              onUpdate={fetchData}
-            />
-          )}
           {activeTab === 'settings' && (
             <SettingsTab />
           )}
@@ -233,17 +212,15 @@ function AdminDashboardInner() {
 }
 
 // Dashboard Tab
-function DashboardTab({ realisations, fournisseurs, messages }: {
+function DashboardTab({ realisations, fournisseurs }: {
   realisations: Realisation[];
   fournisseurs: Fournisseur[];
-  messages: ContactSubmission[];
 }) {
   const cataloguesCount = fournisseurs.filter(f => f.cataloguePdf).length;
   const stats = [
     { label: 'Réalisations', value: realisations.length, color: 'bg-blue-500' },
     { label: 'Partenaires', value: fournisseurs.length, color: 'bg-green-500' },
     { label: 'Catalogues', value: cataloguesCount, color: 'bg-purple-500' },
-    { label: 'Messages non lus', value: messages.filter(m => !m.read).length, color: 'bg-red-500' },
   ];
 
   return (
@@ -264,8 +241,7 @@ function DashboardTab({ realisations, fournisseurs, messages }: {
         ))}
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="bg-white rounded-sm p-6 shadow-sm">
+      <div className="bg-white rounded-sm p-6 shadow-sm">
           <h3 className="font-bold text-abp-primary mb-4">Dernières réalisations</h3>
           <div className="space-y-3">
             {realisations.slice(0, 5).map((r) => (
@@ -281,22 +257,6 @@ function DashboardTab({ realisations, fournisseurs, messages }: {
             ))}
           </div>
         </div>
-
-        <div className="bg-white rounded-sm p-6 shadow-sm">
-          <h3 className="font-bold text-abp-primary mb-4">Derniers messages</h3>
-          <div className="space-y-3">
-            {messages.slice(0, 5).map((m) => (
-              <div key={m.id} className={`p-3 rounded-sm ${m.read ? 'bg-gray-50' : 'bg-blue-50'}`}>
-                <div className="flex items-center justify-between mb-1">
-                  <p className="font-medium text-sm">{m.firstName} {m.lastName}</p>
-                  {!m.read && <span className="w-2 h-2 bg-blue-500 rounded-full" />}
-                </div>
-                <p className="text-xs text-gray-500 line-clamp-1">{m.message}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
     </div>
   );
 }
@@ -3117,137 +3077,6 @@ function FournisseursTab({ fournisseurs, onUpdate }: { fournisseurs: Fournisseur
             </div>
           </div>
         ))}
-      </div>
-    </div>
-  );
-}
-
-// Messages Tab
-function MessagesTab({ messages, onUpdate }: { messages: ContactSubmission[]; onUpdate: () => void }) {
-  const saveBar = useSaveBar();
-  const [selected, setSelected] = useState<ContactSubmission | null>(null);
-
-  const handleMarkAsRead = async (id: string) => {
-    try {
-      await fetch('/api/contact', {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id, action: 'markAsRead' }),
-      });
-      onUpdate();
-    } catch (error) {
-      console.error('Error:', error);
-    }
-  };
-
-  const handleDelete = async (id: string) => {
-    if (!confirm('Supprimer ce message ?')) return;
-    
-    saveBar.showSaving();
-    try {
-      const res = await fetch('/api/contact', {
-        method: 'DELETE',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id }),
-      });
-      if (!res.ok) throw new Error('Erreur serveur');
-
-      if (selected?.id === id) setSelected(null);
-      onUpdate();
-      saveBar.showSaved('Message supprimé');
-    } catch (error) {
-      console.error('Error:', error);
-      saveBar.showError('Erreur lors de la suppression du message');
-    }
-  };
-
-  return (
-    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-      <div className="lg:col-span-1 bg-white rounded-sm shadow-sm overflow-hidden">
-        <div className="p-4 border-b bg-gray-50">
-          <h3 className="font-bold text-abp-primary">Messages ({messages.length})</h3>
-        </div>
-        <div className="max-h-[600px] overflow-y-auto">
-          {messages.length === 0 ? (
-            <p className="p-4 text-gray-500 text-center">Aucun message</p>
-          ) : (
-            messages.map((m) => (
-              <div
-                key={m.id}
-                onClick={() => {
-                  setSelected(m);
-                  if (!m.read) handleMarkAsRead(m.id);
-                }}
-                className={`p-4 border-b cursor-pointer hover:bg-gray-50 ${
-                  selected?.id === m.id ? 'bg-blue-50' : ''
-                } ${!m.read ? 'border-l-4 border-l-abp-gold' : ''}`}
-              >
-                <div className="flex items-center justify-between mb-1">
-                  <span className="font-medium text-sm">{m.firstName} {m.lastName}</span>
-                  {!m.read && <span className="w-2 h-2 bg-abp-gold rounded-full" />}
-                </div>
-                <p className="text-xs text-gray-500 mb-1">{m.email}</p>
-                <p className="text-xs text-gray-400 line-clamp-1">{m.message}</p>
-              </div>
-            ))
-          )}
-        </div>
-      </div>
-
-      <div className="lg:col-span-2 bg-white rounded-sm shadow-sm">
-        {selected ? (
-          <div className="p-6">
-            <div className="flex items-center justify-between mb-6">
-              <div>
-                <h3 className="text-xl font-bold text-abp-primary">{selected.firstName} {selected.lastName}</h3>
-                <p className="text-sm text-gray-500">{selected.email}</p>
-                {selected.phone && <p className="text-sm text-gray-500">{selected.phone}</p>}
-              </div>
-              <button 
-                onClick={() => handleDelete(selected.id)}
-                className="p-2 text-gray-500 hover:text-red-500"
-              >
-                <Trash2 size={20} />
-              </button>
-            </div>
-
-            {selected.projectType && (
-              <div className="mb-4">
-                <span className="text-xs text-gray-500 uppercase">Type de projet</span>
-                <p className="font-medium">{selected.projectType}</p>
-              </div>
-            )}
-
-            <div className="mb-4">
-              <span className="text-xs text-gray-500 uppercase">Message</span>
-              <p className="mt-2 text-gray-700 whitespace-pre-wrap">{selected.message}</p>
-            </div>
-
-            <div className="text-xs text-gray-400">
-              Reçu le {new Date(selected.createdAt).toLocaleDateString('fr-FR', {
-                day: 'numeric',
-                month: 'long',
-                year: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit'
-              })}
-            </div>
-
-            <div className="mt-6 pt-6 border-t">
-              <a 
-                href={`mailto:${selected.email}?subject=Re: Votre demande ABP Partner`}
-                className="inline-flex items-center gap-2 px-4 py-2 bg-abp-gold text-white rounded-sm hover:bg-abp-primary"
-              >
-                Répondre par email
-              </a>
-            </div>
-          </div>
-        ) : (
-          <div className="p-12 text-center text-gray-500">
-            <MessageSquare size={48} className="mx-auto mb-4 opacity-30" />
-            <p>Sélectionnez un message pour le lire</p>
-          </div>
-        )}
       </div>
     </div>
   );
