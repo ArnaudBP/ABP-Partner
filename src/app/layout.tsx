@@ -5,6 +5,7 @@ import SmoothScroll from "@/components/SmoothScroll";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { SiteContentProvider } from "@/components/SiteContentProvider";
 import { getSiteContent } from "@/lib/data";
+import { Analytics } from "@vercel/analytics/next";
 
 export const dynamic = 'force-dynamic';
 
@@ -53,6 +54,7 @@ export default async function RootLayout({
             {children}
           </ThemeProvider>
         </SiteContentProvider>
+        <Analytics />
       </body>
     </html>
   );
