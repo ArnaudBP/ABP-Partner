@@ -4,6 +4,28 @@ import { sendContactNotification } from '@/lib/email';
 
 export const dynamic = 'force-dynamic';
 
+// GET temporaire sans auth pour debug — à supprimer après
+export async function GET() {
+  try {
+    await sendContactNotification({
+      name: 'Test ABP Partner',
+      email: 'test@abp-partner.fr',
+      phone: '0600000000',
+      subject: 'Email de test',
+      message: 'Ceci est un email de test. Si vous le recevez, tout fonctionne !',
+    });
+
+    return NextResponse.json({ success: true, message: 'Email envoyé !' });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    return NextResponse.json({ 
+      error: message,
+      code: (error as NodeJS.ErrnoException)?.code,
+      details: error instanceof Error ? error.stack : undefined
+    }, { status: 500 });
+  }
+}
+
 export async function POST() {
   try {
     const authenticated = await isAuthenticated();
