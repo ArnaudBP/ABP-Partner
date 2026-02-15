@@ -3,22 +3,22 @@ import Footer from "@/components/Footer";
 
 export default function MentionsLegales() {
   return (
-    <main className="min-h-screen bg-abp-dark text-white selection:bg-abp-gold selection:text-abp-dark">
+    <main className="min-h-screen bg-white">
       <Navbar />
       
       <section className="pt-32 pb-20 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto">
-        <h1 className="text-4xl md:text-5xl font-bold font-playfair text-white mb-12 text-center">
+        <h1 className="text-4xl md:text-5xl font-bold mb-12 text-center text-gray-900">
           Mentions <span className="text-abp-gold">Légales</span>
         </h1>
 
-        <div className="space-y-12 font-montserrat font-light text-gray-300 leading-relaxed">
+        <div className="space-y-12 leading-relaxed text-gray-600">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
             <div>
-              <h2 className="text-xl font-bold text-white mb-4 font-playfair">Éditeur du site</h2>
+              <h2 className="text-xl font-bold text-gray-900 mb-4">Éditeur du site</h2>
               <p className="mb-4">
                 Le site www.abp-partner.fr est édité par :
               </p>
-              <p className="font-bold text-white">ABP Partner SAS</p>
+              <p className="font-bold text-gray-900">ABP Partner SAS</p>
               <p>13, rue de la ferme</p>
               <p>60530 Le Mesnil en Thelle</p>
               <p className="mt-4">
@@ -26,29 +26,29 @@ export default function MentionsLegales() {
                 RCS COMPIEGNE : 798 153 169
               </p>
               <p className="mt-4">
-                <span className="font-bold text-white">Directeur de la publication :</span><br />
+                <span className="font-bold text-gray-900">Directeur de la publication :</span><br />
                 Arnaud Bourak-Partouche
               </p>
             </div>
 
             <div>
-              <h2 className="text-xl font-bold text-white mb-4 font-playfair">Hébergement</h2>
-              <p className="font-bold text-white">OVH</p>
+              <h2 className="text-xl font-bold text-gray-900 mb-4">Hébergement</h2>
+              <p className="font-bold text-gray-900">OVH</p>
               <p>SAS au capital de 10 000 000 €</p>
               <p>RCS Roubaix – Tourcoing 424 761 419 00045</p>
               <p>Code APE 6202A - N° TVA : FR 22 424 761 419</p>
               <p>Siège social : 2 rue Kellermann 59100 Roubaix - France</p>
 
-              <h2 className="text-xl font-bold text-white mb-4 font-playfair mt-8">Crédits</h2>
+              <h2 className="text-xl font-bold text-gray-900 mb-4 mt-8">Crédits</h2>
               <p>
-                <span className="font-bold text-white">Conception graphique :</span> ABP Partner<br />
-                <span className="font-bold text-white">Photos :</span> ABP Partner
+                <span className="font-bold text-gray-900">Conception graphique :</span> ABP Partner<br />
+                <span className="font-bold text-gray-900">Photos :</span> ABP Partner
               </p>
             </div>
           </div>
 
-          <div className="border-t border-white/10 pt-8">
-            <h2 className="text-2xl font-bold text-white mb-6 font-playfair">Limite de responsabilités</h2>
+          <div className="border-t border-gray-200 pt-8">
+            <h2 className="text-2xl font-bold text-gray-900 mb-6">Limite de responsabilités</h2>
             <p>
               ABP Partner met tout en œuvre pour offrir des informations actualisées et vérifiées. Cependant ABP Partner ne saurait être tenu pour responsable d'éventuelles erreurs, omissions ou résultats qui pourraient être obtenus à la suite d'un mauvais usage ou interprétation des ces informations.
             </p>
@@ -60,8 +60,8 @@ export default function MentionsLegales() {
             </p>
           </div>
 
-          <div className="border-t border-white/10 pt-8">
-            <h2 className="text-2xl font-bold text-white mb-6 font-playfair">Liens</h2>
+          <div className="border-t border-gray-200 pt-8">
+            <h2 className="text-2xl font-bold text-gray-900 mb-6">Liens</h2>
             <p>
               Le site www.abp-partner.fr peut contenir des liens vers d'autres sites dont il n'exploite pas le contenu ou pour lesquels il n'a pas eu d'autorisation.
             </p>
@@ -70,8 +70,8 @@ export default function MentionsLegales() {
             </p>
           </div>
 
-          <div className="border-t border-white/10 pt-8">
-            <h2 className="text-2xl font-bold text-white mb-6 font-playfair">Copyright et Propriété Intellectuelle</h2>
+          <div className="border-t border-gray-200 pt-8">
+            <h2 className="text-2xl font-bold text-gray-900 mb-6">Copyright et Propriété Intellectuelle</h2>
             <p>
               L'ensemble des éléments figurant sur le site www.abp-partner.fr sont protégés par les dispositions du Code de la Propriété Intellectuelle. En conséquence, toute reproduction, collecte et utilisation à des fins commerciales de ceux-ci, totale ou partielle, ainsi que toute imitation, sans l'accord exprès, préalable et écrit, de ABP Partner est interdite.
             </p>
