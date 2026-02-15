@@ -572,6 +572,28 @@ function HeroEditor({ content, onChange }: { content: Record<string, unknown>; o
               onChange={(val) => update('ctaSecondary', val)}
             />
           </div>
+
+          <div className="border-t pt-6">
+            <h4 className="text-sm font-bold text-gray-700 mb-3 flex items-center gap-2">
+              💬 Encart citation
+              <span className="font-normal text-gray-400">— Affiché entre la description et les boutons</span>
+            </h4>
+            <div className="space-y-4">
+              <TextareaField
+                label="Citation"
+                value={data.quote as string}
+                onChange={(val) => update('quote', val)}
+                hint="Laissez vide pour masquer l'encart"
+                rows={2}
+              />
+              <InputField
+                label="Auteur"
+                value={data.quoteAuthor as string}
+                onChange={(val) => update('quoteAuthor', val)}
+                hint="Nom affiché sous la citation"
+              />
+            </div>
+          </div>
         </div>
 
         {/* Colonne droite - Médias */}

@@ -15,6 +15,8 @@ interface HeroData {
   description?: string;
   ctaPrimary?: string;
   ctaSecondary?: string;
+  quote?: string;
+  quoteAuthor?: string;
 }
 
 export default function HeroSection() {
@@ -40,6 +42,8 @@ export default function HeroSection() {
   const description = data?.description || "Depuis plus de 15 ans, je conçois des cuisines uniques, directement chez vous. Un seul interlocuteur, des conseils personnalisés et un résultat qui vous ressemble.";
   const ctaPrimary = data?.ctaPrimary || "Discutons de votre projet";
   const ctaSecondary = data?.ctaSecondary || "Voir mes réalisations";
+  const quote = data?.quote || "";
+  const quoteAuthor = data?.quoteAuthor || "";
 
   return (
     <section className="relative h-screen w-full overflow-hidden bg-black">
@@ -108,6 +112,24 @@ export default function HeroSection() {
           <p className="text-gray-100 text-base md:text-lg max-w-xl mb-8 font-medium leading-relaxed">
             {description}
           </p>
+
+          {quote && (
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.5, duration: 0.6 }}
+              className="border-l-4 border-abp-gold/70 pl-6 py-3 mb-8 max-w-lg bg-black/20 backdrop-blur-sm rounded-r-lg"
+            >
+              <p className="text-gray-100 text-sm md:text-base italic font-medium leading-relaxed">
+                &ldquo;{quote}&rdquo;
+              </p>
+              {quoteAuthor && (
+                <p className="text-abp-gold text-sm mt-2 font-medium">
+                  — {quoteAuthor}
+                </p>
+              )}
+            </motion.div>
+          )}
 
           <div className="flex flex-col sm:flex-row gap-4">
             <Link 
