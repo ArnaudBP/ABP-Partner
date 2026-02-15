@@ -35,9 +35,9 @@ import MultiImageUpload from "./MultiImageUpload";
 import ContentEditor from "./ContentEditor";
 import FileCleanup from "./FileCleanup";
 import { SaveBarProvider, useSaveBar } from "./SaveBarProvider";
-import { Phone, Mail } from "lucide-react";
+import { Phone, Mail, FileText, Shield } from "lucide-react";
 
-type Tab = 'dashboard' | 'accueil' | 'cuisines' | 'salles-de-bains' | 'dressings' | 'contact' | 'footer' | 'realisations' | 'fournisseurs' | 'settings';
+type Tab = 'dashboard' | 'accueil' | 'cuisines' | 'salles-de-bains' | 'dressings' | 'contact' | 'footer' | 'mentions-legales' | 'politique-confidentialite' | 'realisations' | 'fournisseurs' | 'settings';
 
 const tabs = [
   { id: 'dashboard' as Tab, label: 'Dashboard', icon: LayoutDashboard },
@@ -47,6 +47,8 @@ const tabs = [
   { id: 'dressings' as Tab, label: 'Page Dressings', icon: Shirt },
   { id: 'contact' as Tab, label: 'Page Contact', icon: Mail },
   { id: 'footer' as Tab, label: 'Footer', icon: Settings },
+  { id: 'mentions-legales' as Tab, label: 'Mentions Légales', icon: FileText },
+  { id: 'politique-confidentialite' as Tab, label: 'Confidentialité', icon: Shield },
   { id: 'realisations' as Tab, label: 'Réalisations', icon: Image },
   { id: 'fournisseurs' as Tab, label: 'Partenaires', icon: Truck },
   { id: 'settings' as Tab, label: 'Paramètres', icon: Settings },
@@ -189,6 +191,12 @@ function AdminDashboardInner() {
           )}
           {activeTab === 'footer' && (
             <PageEditorFooter />
+          )}
+          {activeTab === 'mentions-legales' && (
+            <PageEditorMentionsLegales />
+          )}
+          {activeTab === 'politique-confidentialite' && (
+            <PageEditorPolitiqueConfidentialite />
           )}
           {activeTab === 'realisations' && (
             <RealisationsTab 
@@ -3305,6 +3313,474 @@ function SettingsTab() {
         <p className="text-sm text-gray-500 mt-4">
           Pensez à modifier régulièrement votre mot de passe.
         </p>
+      </div>
+    </div>
+  );
+}
+
+// Mentions Légales Editor
+function PageEditorMentionsLegales() {
+  const saveBar = useSaveBar();
+  const [activeSection, setActiveSection] = useState<'titres' | 'editeur' | 'hebergement' | 'sections'>('titres');
+  const [content, setContent] = useState({
+    titre: "Mentions",
+    titreHighlight: "Légales",
+    editeur: {
+      titre: "Éditeur du site",
+      intro: "Le site www.abp-partner.fr est édité par :",
+      societe: "ABP Partner SAS",
+      adresseLigne1: "13, rue de la ferme",
+      adresseLigne2: "60530 Le Mesnil en Thelle",
+      capitalInfo: "SAS au Capital de 5 000 Euros",
+      rcsInfo: "RCS COMPIEGNE : 798 153 169",
+      directeurPublication: "Arnaud Bourak-Partouche",
+    },
+    hebergement: {
+      titre: "Hébergement",
+      societe: "OVH",
+      details: "SAS au capital de 10 000 000 €\nRCS Roubaix – Tourcoing 424 761 419 00045\nCode APE 6202A - N° TVA : FR 22 424 761 419\nSiège social : 2 rue Kellermann 59100 Roubaix - France",
+    },
+    credits: {
+      titre: "Crédits",
+      conceptionGraphique: "ABP Partner",
+      photos: "ABP Partner",
+    },
+    sections: [] as { titre: string; contenu: string }[],
+  });
+  const [saving, setSaving] = useState(false);
+  const [saved, setSaved] = useState(false);
+
+  useEffect(() => {
+    fetch('/api/content')
+      .then(res => res.json())
+      .then(data => {
+        if (data.pageMentionsLegales) {
+          setContent(prev => ({
+            ...prev,
+            ...data.pageMentionsLegales,
+            editeur: { ...prev.editeur, ...(data.pageMentionsLegales.editeur || {}) },
+            hebergement: { ...prev.hebergement, ...(data.pageMentionsLegales.hebergement || {}) },
+            credits: { ...prev.credits, ...(data.pageMentionsLegales.credits || {}) },
+          }));
+        }
+      });
+  }, []);
+
+  const handleSave = async () => {
+    setSaving(true);
+    saveBar.showSaving();
+    try {
+      const res = await fetch('/api/content');
+      const allContent = await res.json();
+      await fetch('/api/content', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...allContent, pageMentionsLegales: content }),
+      });
+      setSaved(true);
+      saveBar.showSaved('Mentions légales enregistrées !', { url: '/mentions-legales', label: 'Voir la page' });
+      setTimeout(() => setSaved(false), 2000);
+    } catch (error) {
+      console.error('Error:', error);
+      saveBar.showError('Erreur lors de la sauvegarde');
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const updateSection = (index: number, field: 'titre' | 'contenu', value: string) => {
+    const newSections = [...content.sections];
+    newSections[index] = { ...newSections[index], [field]: value };
+    setContent({ ...content, sections: newSections });
+  };
+
+  const addSection = () => {
+    setContent({ ...content, sections: [...content.sections, { titre: "Nouvelle section", contenu: "" }] });
+  };
+
+  const removeSection = (index: number) => {
+    setContent({ ...content, sections: content.sections.filter((_, i) => i !== index) });
+  };
+
+  const sections = [
+    { id: 'titres' as const, label: '1. Titre de la page', color: 'bg-blue-500' },
+    { id: 'editeur' as const, label: '2. Éditeur & Crédits', color: 'bg-green-500' },
+    { id: 'hebergement' as const, label: '3. Hébergement', color: 'bg-purple-500' },
+    { id: 'sections' as const, label: '4. Sections de texte', color: 'bg-orange-500' },
+  ];
+
+  const PageSchema = () => (
+    <div className="bg-gray-100 rounded-lg p-4 mb-6">
+      <div className="flex items-center justify-between mb-3">
+        <span className="text-sm font-medium text-gray-700">📄 Mentions légales</span>
+        <a href="/mentions-legales" target="_blank" className="text-sm text-abp-gold hover:underline flex items-center gap-1">
+          <Eye size={14} /> Voir →
+        </a>
+      </div>
+      <div className="space-y-1">
+        {sections.map((section) => (
+          <button key={section.id} onClick={() => setActiveSection(section.id)}
+            className={`w-full flex items-center gap-2 p-2 rounded text-left text-sm transition-all ${
+              activeSection === section.id ? 'bg-white shadow ring-2 ring-abp-gold' : 'hover:bg-white/50'
+            }`}>
+            <span className={`w-3 h-3 rounded ${section.color}`}></span>
+            <span className={activeSection === section.id ? 'font-medium' : ''}>{section.label}</span>
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+
+  return (
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <div>
+          <h2 className="text-2xl font-bold text-abp-primary">Mentions Légales</h2>
+          <p className="text-gray-500 text-sm">Éditez toutes les informations légales du site</p>
+        </div>
+        <button onClick={handleSave} disabled={saving}
+          className={`flex items-center gap-2 px-6 py-3 rounded font-medium transition-all ${
+            saved ? 'bg-green-500 text-white' : 'bg-abp-gold text-white hover:bg-abp-primary'
+          }`}>
+          {saved ? <Check size={20} /> : <Save size={20} />}
+          {saving ? 'Sauvegarde...' : saved ? 'Sauvegardé !' : 'Enregistrer'}
+        </button>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+        <div className="lg:col-span-1"><PageSchema /></div>
+        <div className="lg:col-span-3">
+          <div className="bg-white rounded-lg shadow p-6">
+            <div className="flex items-center gap-2 mb-6">
+              <span className={`w-4 h-4 rounded ${sections.find(s => s.id === activeSection)?.color}`}></span>
+              <h3 className="text-lg font-bold text-abp-primary">{sections.find(s => s.id === activeSection)?.label}</h3>
+            </div>
+
+            {activeSection === 'titres' && (
+              <div className="space-y-4">
+                <p className="text-sm text-gray-500 bg-gray-50 p-3 rounded">✏️ Le titre affiché en haut de la page Mentions Légales.</p>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Titre (partie 1)</label>
+                    <input type="text" value={content.titre} onChange={(e) => setContent({ ...content, titre: e.target.value })}
+                      className="w-full px-4 py-2 border rounded focus:outline-none focus:border-abp-gold text-xl font-bold" />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Titre coloré (partie 2)</label>
+                    <input type="text" value={content.titreHighlight} onChange={(e) => setContent({ ...content, titreHighlight: e.target.value })}
+                      className="w-full px-4 py-2 border rounded focus:outline-none focus:border-abp-gold text-xl font-bold text-abp-gold" />
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {activeSection === 'editeur' && (
+              <div className="space-y-4">
+                <p className="text-sm text-gray-500 bg-gray-50 p-3 rounded">🏢 Informations sur l&apos;éditeur du site et les crédits.</p>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Titre de la section</label>
+                  <input type="text" value={content.editeur.titre} onChange={(e) => setContent({ ...content, editeur: { ...content.editeur, titre: e.target.value } })}
+                    className="w-full px-4 py-2 border rounded focus:outline-none focus:border-abp-gold font-bold" />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Texte d&apos;introduction</label>
+                  <input type="text" value={content.editeur.intro} onChange={(e) => setContent({ ...content, editeur: { ...content.editeur, intro: e.target.value } })}
+                    className="w-full px-4 py-2 border rounded focus:outline-none focus:border-abp-gold" />
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Nom de la société</label>
+                    <input type="text" value={content.editeur.societe} onChange={(e) => setContent({ ...content, editeur: { ...content.editeur, societe: e.target.value } })}
+                      className="w-full px-4 py-2 border rounded focus:outline-none focus:border-abp-gold font-bold" />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Directeur de la publication</label>
+                    <input type="text" value={content.editeur.directeurPublication} onChange={(e) => setContent({ ...content, editeur: { ...content.editeur, directeurPublication: e.target.value } })}
+                      className="w-full px-4 py-2 border rounded focus:outline-none focus:border-abp-gold" />
+                  </div>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Adresse ligne 1</label>
+                    <input type="text" value={content.editeur.adresseLigne1} onChange={(e) => setContent({ ...content, editeur: { ...content.editeur, adresseLigne1: e.target.value } })}
+                      className="w-full px-4 py-2 border rounded focus:outline-none focus:border-abp-gold" />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Adresse ligne 2</label>
+                    <input type="text" value={content.editeur.adresseLigne2} onChange={(e) => setContent({ ...content, editeur: { ...content.editeur, adresseLigne2: e.target.value } })}
+                      className="w-full px-4 py-2 border rounded focus:outline-none focus:border-abp-gold" />
+                  </div>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Capital social</label>
+                    <input type="text" value={content.editeur.capitalInfo} onChange={(e) => setContent({ ...content, editeur: { ...content.editeur, capitalInfo: e.target.value } })}
+                      className="w-full px-4 py-2 border rounded focus:outline-none focus:border-abp-gold" />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">RCS</label>
+                    <input type="text" value={content.editeur.rcsInfo} onChange={(e) => setContent({ ...content, editeur: { ...content.editeur, rcsInfo: e.target.value } })}
+                      className="w-full px-4 py-2 border rounded focus:outline-none focus:border-abp-gold" />
+                  </div>
+                </div>
+                <div className="border-t pt-4 mt-4">
+                  <h4 className="font-semibold text-gray-700 mb-3">{content.credits.titre}</h4>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Conception graphique</label>
+                      <input type="text" value={content.credits.conceptionGraphique} onChange={(e) => setContent({ ...content, credits: { ...content.credits, conceptionGraphique: e.target.value } })}
+                        className="w-full px-4 py-2 border rounded focus:outline-none focus:border-abp-gold" />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Photos</label>
+                      <input type="text" value={content.credits.photos} onChange={(e) => setContent({ ...content, credits: { ...content.credits, photos: e.target.value } })}
+                        className="w-full px-4 py-2 border rounded focus:outline-none focus:border-abp-gold" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {activeSection === 'hebergement' && (
+              <div className="space-y-4">
+                <p className="text-sm text-gray-500 bg-gray-50 p-3 rounded">🌐 Informations sur l&apos;hébergeur du site.</p>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Titre de la section</label>
+                  <input type="text" value={content.hebergement.titre} onChange={(e) => setContent({ ...content, hebergement: { ...content.hebergement, titre: e.target.value } })}
+                    className="w-full px-4 py-2 border rounded focus:outline-none focus:border-abp-gold font-bold" />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Nom de l&apos;hébergeur</label>
+                  <input type="text" value={content.hebergement.societe} onChange={(e) => setContent({ ...content, hebergement: { ...content.hebergement, societe: e.target.value } })}
+                    className="w-full px-4 py-2 border rounded focus:outline-none focus:border-abp-gold font-bold" />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Détails (une info par ligne)</label>
+                  <textarea value={content.hebergement.details} onChange={(e) => setContent({ ...content, hebergement: { ...content.hebergement, details: e.target.value } })}
+                    rows={5} className="w-full px-4 py-2 border rounded focus:outline-none focus:border-abp-gold" />
+                </div>
+              </div>
+            )}
+
+            {activeSection === 'sections' && (
+              <div className="space-y-4">
+                <p className="text-sm text-gray-500 bg-gray-50 p-3 rounded">
+                  📝 Sections de texte libre (Responsabilités, Liens, Propriété intellectuelle, etc.). Séparez les paragraphes par une ligne vide.
+                </p>
+                {content.sections.map((section, index) => (
+                  <div key={index} className="border rounded-lg p-4 space-y-3">
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm font-bold text-gray-500">Section {index + 1}</span>
+                      <button onClick={() => removeSection(index)} className="p-1 text-red-500 hover:bg-red-50 rounded">
+                        <Trash2 size={16} />
+                      </button>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Titre</label>
+                      <input type="text" value={section.titre} onChange={(e) => updateSection(index, 'titre', e.target.value)}
+                        className="w-full px-4 py-2 border rounded focus:outline-none focus:border-abp-gold font-bold" />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Contenu</label>
+                      <textarea value={section.contenu} onChange={(e) => updateSection(index, 'contenu', e.target.value)}
+                        rows={5} className="w-full px-4 py-2 border rounded focus:outline-none focus:border-abp-gold text-sm" />
+                    </div>
+                  </div>
+                ))}
+                <button onClick={addSection} className="flex items-center gap-2 text-sm text-abp-gold hover:text-abp-primary font-medium">
+                  <Plus size={16} /> Ajouter une section
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Politique de Confidentialité Editor
+function PageEditorPolitiqueConfidentialite() {
+  const saveBar = useSaveBar();
+  const [activeSection, setActiveSection] = useState<'titres' | 'sections'>('titres');
+  const [content, setContent] = useState({
+    titre: "Politique de",
+    titreHighlight: "Confidentialité",
+    intro: "La présente politique de confidentialité décrit comment ABP Partner collecte, utilise et protège les informations personnelles que vous fournissez sur le site www.abp-partner.fr.",
+    sections: [] as { titre: string; contenu: string }[],
+  });
+  const [saving, setSaving] = useState(false);
+  const [saved, setSaved] = useState(false);
+
+  useEffect(() => {
+    fetch('/api/content')
+      .then(res => res.json())
+      .then(data => {
+        if (data.pagePolitiqueConfidentialite) {
+          setContent(prev => ({ ...prev, ...data.pagePolitiqueConfidentialite }));
+        }
+      });
+  }, []);
+
+  const handleSave = async () => {
+    setSaving(true);
+    saveBar.showSaving();
+    try {
+      const res = await fetch('/api/content');
+      const allContent = await res.json();
+      await fetch('/api/content', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...allContent, pagePolitiqueConfidentialite: content }),
+      });
+      setSaved(true);
+      saveBar.showSaved('Politique de confidentialité enregistrée !', { url: '/politique-confidentialite', label: 'Voir la page' });
+      setTimeout(() => setSaved(false), 2000);
+    } catch (error) {
+      console.error('Error:', error);
+      saveBar.showError('Erreur lors de la sauvegarde');
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const updateSection = (index: number, field: 'titre' | 'contenu', value: string) => {
+    const newSections = [...content.sections];
+    newSections[index] = { ...newSections[index], [field]: value };
+    setContent({ ...content, sections: newSections });
+  };
+
+  const addSection = () => {
+    setContent({ ...content, sections: [...content.sections, { titre: "Nouvelle section", contenu: "" }] });
+  };
+
+  const removeSection = (index: number) => {
+    setContent({ ...content, sections: content.sections.filter((_, i) => i !== index) });
+  };
+
+  const moveSection = (index: number, direction: 'up' | 'down') => {
+    const newSections = [...content.sections];
+    const target = direction === 'up' ? index - 1 : index + 1;
+    if (target < 0 || target >= newSections.length) return;
+    [newSections[index], newSections[target]] = [newSections[target], newSections[index]];
+    setContent({ ...content, sections: newSections });
+  };
+
+  const navSections = [
+    { id: 'titres' as const, label: '1. Titre & Introduction', color: 'bg-blue-500' },
+    { id: 'sections' as const, label: '2. Sections de texte', color: 'bg-green-500' },
+  ];
+
+  const PageSchema = () => (
+    <div className="bg-gray-100 rounded-lg p-4 mb-6">
+      <div className="flex items-center justify-between mb-3">
+        <span className="text-sm font-medium text-gray-700">🔒 Confidentialité</span>
+        <a href="/politique-confidentialite" target="_blank" className="text-sm text-abp-gold hover:underline flex items-center gap-1">
+          <Eye size={14} /> Voir →
+        </a>
+      </div>
+      <div className="space-y-1">
+        {navSections.map((section) => (
+          <button key={section.id} onClick={() => setActiveSection(section.id)}
+            className={`w-full flex items-center gap-2 p-2 rounded text-left text-sm transition-all ${
+              activeSection === section.id ? 'bg-white shadow ring-2 ring-abp-gold' : 'hover:bg-white/50'
+            }`}>
+            <span className={`w-3 h-3 rounded ${section.color}`}></span>
+            <span className={activeSection === section.id ? 'font-medium' : ''}>{section.label}</span>
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+
+  return (
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <div>
+          <h2 className="text-2xl font-bold text-abp-primary">Politique de Confidentialité</h2>
+          <p className="text-gray-500 text-sm">RGPD, cookies, données personnelles</p>
+        </div>
+        <button onClick={handleSave} disabled={saving}
+          className={`flex items-center gap-2 px-6 py-3 rounded font-medium transition-all ${
+            saved ? 'bg-green-500 text-white' : 'bg-abp-gold text-white hover:bg-abp-primary'
+          }`}>
+          {saved ? <Check size={20} /> : <Save size={20} />}
+          {saving ? 'Sauvegarde...' : saved ? 'Sauvegardé !' : 'Enregistrer'}
+        </button>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+        <div className="lg:col-span-1"><PageSchema /></div>
+        <div className="lg:col-span-3">
+          <div className="bg-white rounded-lg shadow p-6">
+            <div className="flex items-center gap-2 mb-6">
+              <span className={`w-4 h-4 rounded ${navSections.find(s => s.id === activeSection)?.color}`}></span>
+              <h3 className="text-lg font-bold text-abp-primary">{navSections.find(s => s.id === activeSection)?.label}</h3>
+            </div>
+
+            {activeSection === 'titres' && (
+              <div className="space-y-4">
+                <p className="text-sm text-gray-500 bg-gray-50 p-3 rounded">✏️ Titre et introduction de la page.</p>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Titre (partie 1)</label>
+                    <input type="text" value={content.titre} onChange={(e) => setContent({ ...content, titre: e.target.value })}
+                      className="w-full px-4 py-2 border rounded focus:outline-none focus:border-abp-gold text-xl font-bold" />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Titre coloré (partie 2)</label>
+                    <input type="text" value={content.titreHighlight} onChange={(e) => setContent({ ...content, titreHighlight: e.target.value })}
+                      className="w-full px-4 py-2 border rounded focus:outline-none focus:border-abp-gold text-xl font-bold text-abp-gold" />
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Introduction</label>
+                  <textarea value={content.intro} onChange={(e) => setContent({ ...content, intro: e.target.value })}
+                    rows={3} className="w-full px-4 py-2 border rounded focus:outline-none focus:border-abp-gold" />
+                </div>
+              </div>
+            )}
+
+            {activeSection === 'sections' && (
+              <div className="space-y-4">
+                <p className="text-sm text-gray-500 bg-gray-50 p-3 rounded">
+                  📝 Ajoutez/modifiez les sections de la politique. Utilisez &quot;- &quot; pour les listes à puces. Séparez les paragraphes par une ligne vide.
+                </p>
+                {content.sections.map((section, index) => (
+                  <div key={index} className="border rounded-lg p-4 space-y-3">
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm font-bold text-gray-500">Section {index + 1}</span>
+                      <div className="flex items-center gap-1">
+                        <button onClick={() => moveSection(index, 'up')} disabled={index === 0} className="p-1 text-gray-400 hover:text-gray-600 disabled:opacity-30">
+                          <ChevronUp size={16} />
+                        </button>
+                        <button onClick={() => moveSection(index, 'down')} disabled={index === content.sections.length - 1} className="p-1 text-gray-400 hover:text-gray-600 disabled:opacity-30">
+                          <ChevronDown size={16} />
+                        </button>
+                        <button onClick={() => removeSection(index)} className="p-1 text-red-500 hover:bg-red-50 rounded">
+                          <Trash2 size={16} />
+                        </button>
+                      </div>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Titre</label>
+                      <input type="text" value={section.titre} onChange={(e) => updateSection(index, 'titre', e.target.value)}
+                        className="w-full px-4 py-2 border rounded focus:outline-none focus:border-abp-gold font-bold" />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Contenu</label>
+                      <textarea value={section.contenu} onChange={(e) => updateSection(index, 'contenu', e.target.value)}
+                        rows={5} className="w-full px-4 py-2 border rounded focus:outline-none focus:border-abp-gold text-sm" />
+                    </div>
+                  </div>
+                ))}
+                <button onClick={addSection} className="flex items-center gap-2 text-sm text-abp-gold hover:text-abp-primary font-medium">
+                  <Plus size={16} /> Ajouter une section
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
       </div>
     </div>
   );

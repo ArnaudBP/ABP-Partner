@@ -1,84 +1,138 @@
+"use client";
+
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { useSiteContent } from "@/components/SiteContentProvider";
+
+interface MentionsSection {
+  titre: string;
+  contenu: string;
+}
+
+interface MentionsLegalesData {
+  titre: string;
+  titreHighlight: string;
+  editeur: {
+    titre: string;
+    intro: string;
+    societe: string;
+    adresseLigne1: string;
+    adresseLigne2: string;
+    capitalInfo: string;
+    rcsInfo: string;
+    directeurPublication: string;
+  };
+  hebergement: {
+    titre: string;
+    societe: string;
+    details: string;
+  };
+  credits: {
+    titre: string;
+    conceptionGraphique: string;
+    photos: string;
+  };
+  sections: MentionsSection[];
+}
+
+const defaultContent: MentionsLegalesData = {
+  titre: "Mentions",
+  titreHighlight: "Légales",
+  editeur: {
+    titre: "Éditeur du site",
+    intro: "Le site www.abp-partner.fr est édité par :",
+    societe: "ABP Partner SAS",
+    adresseLigne1: "13, rue de la ferme",
+    adresseLigne2: "60530 Le Mesnil en Thelle",
+    capitalInfo: "SAS au Capital de 5 000 Euros",
+    rcsInfo: "RCS COMPIEGNE : 798 153 169",
+    directeurPublication: "Arnaud Bourak-Partouche",
+  },
+  hebergement: {
+    titre: "Hébergement",
+    societe: "OVH",
+    details:
+      "SAS au capital de 10 000 000 €\nRCS Roubaix – Tourcoing 424 761 419 00045\nCode APE 6202A - N° TVA : FR 22 424 761 419\nSiège social : 2 rue Kellermann 59100 Roubaix - France",
+  },
+  credits: {
+    titre: "Crédits",
+    conceptionGraphique: "ABP Partner",
+    photos: "ABP Partner",
+  },
+  sections: [],
+};
 
 export default function MentionsLegales() {
+  const siteContent = useSiteContent();
+  const raw = siteContent?.pageMentionsLegales as Partial<MentionsLegalesData> | undefined;
+  const content = raw
+    ? {
+        ...defaultContent,
+        ...raw,
+        editeur: { ...defaultContent.editeur, ...(raw.editeur as object) },
+        hebergement: { ...defaultContent.hebergement, ...(raw.hebergement as object) },
+        credits: { ...defaultContent.credits, ...(raw.credits as object) },
+      }
+    : defaultContent;
+
   return (
     <main className="min-h-screen bg-white">
       <Navbar />
-      
+
       <section className="pt-32 pb-20 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto">
         <h1 className="text-4xl md:text-5xl font-bold mb-12 text-center text-gray-900">
-          Mentions <span className="text-abp-gold">Légales</span>
+          {content.titre} <span className="text-abp-gold">{content.titreHighlight}</span>
         </h1>
 
         <div className="space-y-12 leading-relaxed text-gray-600">
+          {/* Éditeur + Hébergement */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
             <div>
-              <h2 className="text-xl font-bold text-gray-900 mb-4">Éditeur du site</h2>
-              <p className="mb-4">
-                Le site www.abp-partner.fr est édité par :
-              </p>
-              <p className="font-bold text-gray-900">ABP Partner SAS</p>
-              <p>13, rue de la ferme</p>
-              <p>60530 Le Mesnil en Thelle</p>
+              <h2 className="text-xl font-bold text-gray-900 mb-4">{content.editeur.titre}</h2>
+              <p className="mb-4">{content.editeur.intro}</p>
+              <p className="font-bold text-gray-900">{content.editeur.societe}</p>
+              <p>{content.editeur.adresseLigne1}</p>
+              <p>{content.editeur.adresseLigne2}</p>
               <p className="mt-4">
-                SAS au Capital de 5 000 Euros<br />
-                RCS COMPIEGNE : 798 153 169
+                {content.editeur.capitalInfo}
+                <br />
+                {content.editeur.rcsInfo}
               </p>
               <p className="mt-4">
-                <span className="font-bold text-gray-900">Directeur de la publication :</span><br />
-                Arnaud Bourak-Partouche
+                <span className="font-bold text-gray-900">Directeur de la publication :</span>
+                <br />
+                {content.editeur.directeurPublication}
               </p>
             </div>
 
             <div>
-              <h2 className="text-xl font-bold text-gray-900 mb-4">Hébergement</h2>
-              <p className="font-bold text-gray-900">OVH</p>
-              <p>SAS au capital de 10 000 000 €</p>
-              <p>RCS Roubaix – Tourcoing 424 761 419 00045</p>
-              <p>Code APE 6202A - N° TVA : FR 22 424 761 419</p>
-              <p>Siège social : 2 rue Kellermann 59100 Roubaix - France</p>
+              <h2 className="text-xl font-bold text-gray-900 mb-4">{content.hebergement.titre}</h2>
+              <p className="font-bold text-gray-900">{content.hebergement.societe}</p>
+              {content.hebergement.details.split("\n").map((line, i) => (
+                <p key={i}>{line}</p>
+              ))}
 
-              <h2 className="text-xl font-bold text-gray-900 mb-4 mt-8">Crédits</h2>
+              <h2 className="text-xl font-bold text-gray-900 mb-4 mt-8">{content.credits.titre}</h2>
               <p>
-                <span className="font-bold text-gray-900">Conception graphique :</span> ABP Partner<br />
-                <span className="font-bold text-gray-900">Photos :</span> ABP Partner
+                <span className="font-bold text-gray-900">Conception graphique :</span>{" "}
+                {content.credits.conceptionGraphique}
+                <br />
+                <span className="font-bold text-gray-900">Photos :</span> {content.credits.photos}
               </p>
             </div>
           </div>
 
-          <div className="border-t border-gray-200 pt-8">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">Limite de responsabilités</h2>
-            <p>
-              ABP Partner met tout en œuvre pour offrir des informations actualisées et vérifiées. Cependant ABP Partner ne saurait être tenu pour responsable d'éventuelles erreurs, omissions ou résultats qui pourraient être obtenus à la suite d'un mauvais usage ou interprétation des ces informations.
-            </p>
-            <p className="mt-4">
-              ABP Partner se réserve le droit de corriger ces informations, dès que ces erreurs sont portées à sa connaissance et, plus généralement, de modifier, à tout moment, sans préavis, tout ou partie du site sans que sa responsabilité puisse être engagée de ce fait.
-            </p>
-            <p className="mt-4">
-              Les informations fournies par ABP Partner le sont à titre indicatif et ne sauraient dispenser l'utilisateur d'une vérification complémentaire. En conséquence, l'utilisateur reconnaît utiliser ces informations sous sa responsabilité exclusive.
-            </p>
-          </div>
-
-          <div className="border-t border-gray-200 pt-8">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">Liens</h2>
-            <p>
-              Le site www.abp-partner.fr peut contenir des liens vers d'autres sites dont il n'exploite pas le contenu ou pour lesquels il n'a pas eu d'autorisation.
-            </p>
-            <p className="mt-4">
-              En aucune manière, ABP Partner ne peut être tenu responsable du contenu, publicités, produits, services ou tout autre matériel disponible sur ou à partir de ces sites ou sources externes qui ne sont ni vérifiées ni approuvées par lui.
-            </p>
-          </div>
-
-          <div className="border-t border-gray-200 pt-8">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">Copyright et Propriété Intellectuelle</h2>
-            <p>
-              L'ensemble des éléments figurant sur le site www.abp-partner.fr sont protégés par les dispositions du Code de la Propriété Intellectuelle. En conséquence, toute reproduction, collecte et utilisation à des fins commerciales de ceux-ci, totale ou partielle, ainsi que toute imitation, sans l'accord exprès, préalable et écrit, de ABP Partner est interdite.
-            </p>
-            <p className="mt-4">
-              Cette interdiction s'étend notamment à tout élément rédactionnel figurant sur le site, aux logos, images, photos, cette liste n'étant pas limitative.
-            </p>
-          </div>
+          {/* Sections dynamiques */}
+          {content.sections.map((section, index) => (
+            <div key={index} className="border-t border-gray-200 pt-8">
+              <h2 className="text-2xl font-bold text-gray-900 mb-6">{section.titre}</h2>
+              {section.contenu.split("\n\n").map((paragraph, pIdx) => (
+                <p key={pIdx} className={pIdx > 0 ? "mt-4" : ""}>
+                  {paragraph}
+                </p>
+              ))}
+            </div>
+          ))}
         </div>
       </section>
 
