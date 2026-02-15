@@ -5,6 +5,9 @@ import AvisSection from "./AvisSection";
 import { useSiteContent } from '../SiteContentProvider';
 
 interface AvisSectionData {
+  title?: string;
+  titleHighlight?: string;
+  description?: string;
   houzzProfileUrl: string;
   houzzProId: string;
   houzzHzid: string;
@@ -29,6 +32,9 @@ export default function AvisSectionWrapper() {
 
   return (
     <AvisSection
+      title={data.title}
+      titleHighlight={data.titleHighlight}
+      description={data.description}
       houzzProfileUrl={data.houzzProfileUrl}
       houzzProId={data.houzzProId}
       houzzHzid={data.houzzHzid}

@@ -11,6 +11,7 @@ interface HeroData {
   backgroundImage?: string;
   title?: string;
   titleHighlight?: string;
+  subtitle?: string;
   description?: string;
   ctaPrimary?: string;
   ctaSecondary?: string;
@@ -32,6 +33,13 @@ export default function HeroSection() {
   const backgroundImage = data?.backgroundImage;
   const hasVideo = videoUrl && videoUrl.trim() !== "";
   const hasImage = backgroundImage && backgroundImage.trim() !== "";
+
+  const title = data?.title || "Votre cuisine sur mesure,";
+  const titleHighlight = data?.titleHighlight || "créée avec passion";
+  const subtitle = data?.subtitle || "ABP Partner";
+  const description = data?.description || "Depuis plus de 15 ans, je conçois des cuisines uniques, directement chez vous. Un seul interlocuteur, des conseils personnalisés et un résultat qui vous ressemble.";
+  const ctaPrimary = data?.ctaPrimary || "Discutons de votre projet";
+  const ctaSecondary = data?.ctaSecondary || "Voir mes réalisations";
 
   return (
     <section className="relative h-screen w-full overflow-hidden bg-black">
@@ -89,40 +97,30 @@ export default function HeroSection() {
             transition={{ delay: 0.3 }}
             className="text-abp-gold text-sm md:text-base font-medium tracking-wide mb-2"
           >
-            Bienvenue chez moi
+            {subtitle}
           </motion.p>
           
           <h1 className="text-white text-4xl md:text-6xl font-serif font-bold leading-tight mb-6">
-            Votre cuisine sur mesure,<br />
-            <span className="italic text-gray-100 font-light">créée avec passion</span>
+            {title}<br />
+            <span className="italic text-gray-100 font-light">{titleHighlight}</span>
           </h1>
           
-          <p className="text-gray-100 text-base md:text-lg max-w-xl mb-6 font-medium leading-relaxed">
-            Depuis plus de 15 ans, je conçois des cuisines uniques, 
-            directement chez vous. Un seul interlocuteur, des conseils 
-            personnalisés et un résultat qui vous ressemble.
+          <p className="text-gray-100 text-base md:text-lg max-w-xl mb-8 font-medium leading-relaxed">
+            {description}
           </p>
-          
-          {/* Citation personnelle */}
-          <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 mb-8 max-w-md border-l-4 border-abp-gold">
-            <p className="text-white/90 italic text-sm">
-              &quot;Chaque cuisine raconte une histoire. La vôtre mérite d&apos;être unique.&quot;
-            </p>
-            <p className="text-abp-gold font-medium text-sm mt-2">— Arnaud</p>
-          </div>
 
           <div className="flex flex-col sm:flex-row gap-4">
             <Link 
               href="/contact" 
               className="px-8 py-4 bg-abp-gold text-white text-sm font-bold tracking-wider hover:bg-white hover:text-abp-primary transition-colors duration-300 text-center rounded-lg shadow-lg"
             >
-              Discutons de votre projet
+              {ctaPrimary}
             </Link>
             <Link 
               href="/realisations" 
               className="px-8 py-4 border-2 border-white/80 text-white text-sm font-bold tracking-wider hover:bg-white hover:text-abp-primary transition-colors duration-300 text-center rounded-lg"
             >
-              Voir mes réalisations
+              {ctaSecondary}
             </Link>
           </div>
         </motion.div>
