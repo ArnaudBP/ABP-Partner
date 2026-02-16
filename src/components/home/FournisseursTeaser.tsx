@@ -39,7 +39,7 @@ export default function FournisseursTeaser() {
 
   const title = data?.title || "Des marques";
   const titleHighlight = data?.titleHighlight || "de confiance";
-  const description = data?.description || "Après 15 ans de métier, j'ai sélectionné les meilleurs partenaires. Des marques solides, des produits durables, et un rapport qualité-prix imbattable.";
+  const description = data?.description || "Après 30 ans de métier, j'ai sélectionné les meilleurs partenaires. Des marques solides, des produits durables, et un rapport qualité-prix imbattable.";
 
   return (
     <section className="py-24 bg-abp-primary text-white">
