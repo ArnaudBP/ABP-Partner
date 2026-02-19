@@ -6,6 +6,7 @@ import { ThemeProvider } from "@/components/ThemeProvider";
 import { SiteContentProvider } from "@/components/SiteContentProvider";
 import { getSiteContent } from "@/lib/data";
 import { Analytics } from '@vercel/analytics/next';
+import Script from 'next/script'
 
 export const dynamic = 'force-dynamic';
 
@@ -55,6 +56,18 @@ export default async function RootLayout({
           </ThemeProvider>
         </SiteContentProvider>
         <Analytics />
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-JG6YZ6F17M"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-JG6YZ6F17M');
+          `}
+        </Script>
       </body>
     </html>
   );
