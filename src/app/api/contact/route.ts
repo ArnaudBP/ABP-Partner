@@ -27,23 +27,25 @@ export async function POST(request: NextRequest) {
   try {
     const data = await request.json();
     
-    const submission: ContactSubmission = {
-      ...data,
-      id: uuidv4(),
-      createdAt: new Date().toISOString(),
-      read: false,
-    };
-    
-    await saveContactSubmission(submission);
+const fullName = `${data.firstName || ''} ${data.lastName || ''}`.trim() || 'Inconnu';
 
-    // Envoyer la notification par email (non-bloquant)
-    sendContactNotification({
-      name: data.name || 'Inconnu',
-      email: data.email || '',
-      phone: data.phone,
-      subject: data.subject,
-      message: data.message || '',
-    }).catch((err) => console.error('Erreur envoi email:', err));
+const submission: ContactSubmission = {
+  ...data,
+  name: fullName,
+  id: uuidv4(),
+  createdAt: new Date().toISOString(),
+  read: false,
+};
+
+await saveContactSubmission(submission);
+// Envoyer la notification par email (non-bloquant)
+sendContactNotification({
+  name: fullName,
+  email: data.email || '',
+  phone: data.phone,
+  subject: data.projectType,
+  message: data.message || '',
+}).catch((err) => console.error('Erreur envoi email:', err));
     
     revalidatePath('/', 'layout');
     return NextResponse.json({ success: true, message: 'Message envoyé avec succès' });
