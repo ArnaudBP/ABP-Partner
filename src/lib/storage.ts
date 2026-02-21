@@ -42,31 +42,35 @@ async function writeJsonToFile<T>(filename: string, data: T): Promise<void> {
 
 // Vercel Blob (production)
 async function readJsonFromBlob<T>(filename: string, defaultValue: T): Promise<T> {
-  try {
-    const blobPath = `data/${filename}`;
-    
-    // Check if blob exists
-    const blobs = await list({ prefix: blobPath });
-    const blob = blobs.blobs.find(b => b.pathname === blobPath);
-    
-    if (!blob) {
-      // Try to initialize from local file if exists
-      try {
-        const localData = await readJsonFromFile<T>(filename, defaultValue);
-        await writeJsonToBlob(filename, localData);
-        return localData;
-      } catch {
-        return defaultValue;
+  const maxRetries = 3;
+  
+  for (let attempt = 1; attempt <= maxRetries; attempt++) {
+    try {
+      const blobPath = `data/${filename}`;
+      const blobs = await list({ prefix: blobPath });
+      const blob = blobs.blobs.find(b => b.pathname === blobPath);
+      
+      if (!blob) {
+        try {
+          const localData = await readJsonFromFile<T>(filename, defaultValue);
+          await writeJsonToBlob(filename, localData);
+          return localData;
+        } catch {
+          return defaultValue;
+        }
       }
-    }
 
-    const response = await fetch(blob.url, { next: { revalidate: 60 } });
-    const content = await response.json();
-    return content as T;
-  } catch (error) {
-    console.error(`Error reading ${filename} from Blob:`, error);
-    return defaultValue;
+      const response = await fetch(blob.url, { next: { revalidate: 60 } });
+      const content = await response.json();
+      return content as T;
+    } catch (error) {
+      console.error(`Attempt ${attempt} failed for ${filename}:`, error);
+      if (attempt === maxRetries) return defaultValue;
+      await new Promise(resolve => setTimeout(resolve, 500 * attempt));
+    }
   }
+  
+  return defaultValue;
 }
 
 async function writeJsonToBlob<T>(filename: string, data: T): Promise<void> {
