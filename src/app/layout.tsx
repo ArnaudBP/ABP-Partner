@@ -9,6 +9,7 @@ import { Analytics } from '@vercel/analytics/next';
 import Script from 'next/script'
 
 export const dynamic = 'force-dynamic';
+export const revalidate = 60;
 
 const playfair = Playfair_Display({
   variable: "--font-playfair",
