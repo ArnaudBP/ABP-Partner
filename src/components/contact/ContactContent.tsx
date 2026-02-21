@@ -5,6 +5,13 @@ import { motion } from "framer-motion";
 import { MapPin, Phone, Mail, Clock, CheckCircle, Send } from "lucide-react";
 import { useSiteContent } from '../SiteContentProvider';
 
+// ✅ Fonction utilitaire GA4
+const trackEvent = (eventName: string, params?: Record<string, string>) => {
+  if (typeof window !== "undefined" && typeof window.gtag !== "undefined") {
+    window.gtag("event", eventName, params);
+  }
+};
+
 interface PageContactContent {
   headerAccroche: string;
   headerTitle: string;
@@ -75,6 +82,10 @@ export default function ContactContent() {
 
       if (response.ok) {
         setSubmitted(true);
+        // ✅ Événement GA4 : formulaire soumis avec succès
+        trackEvent("form_contact_submit", {
+          project_type: formData.projectType || "non_specifie",
+        });
         setFormData({
           firstName: "",
           lastName: "",
@@ -149,7 +160,12 @@ export default function ContactContent() {
                   </div>
                   <div>
                     <h3 className="font-bold mb-1">Téléphone</h3>
-                    <a href={`tel:+${formatPhoneForLink(content.telephone)}`} className="text-gray-300 text-sm hover:text-abp-gold transition-colors">
+                    {/* ✅ Événement GA4 : clic sur le téléphone */}
+                    <a
+                      href={`tel:+${formatPhoneForLink(content.telephone)}`}
+                      onClick={() => trackEvent("click_telephone")}
+                      className="text-gray-300 text-sm hover:text-abp-gold transition-colors"
+                    >
                       {content.telephone}
                     </a>
                   </div>
@@ -161,7 +177,12 @@ export default function ContactContent() {
                   </div>
                   <div>
                     <h3 className="font-bold mb-1">Email</h3>
-                    <a href={`mailto:${content.email}`} className="text-gray-300 text-sm hover:text-abp-gold transition-colors">
+                    {/* ✅ Événement GA4 : clic sur l'email */}
+                    <a
+                      href={`mailto:${content.email}`}
+                      onClick={() => trackEvent("click_email")}
+                      className="text-gray-300 text-sm hover:text-abp-gold transition-colors"
+                    >
                       {content.email}
                     </a>
                   </div>
