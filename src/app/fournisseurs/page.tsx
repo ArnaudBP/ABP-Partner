@@ -4,7 +4,7 @@ import Footer from "@/components/Footer";
 import FournisseursContent from "@/components/fournisseurs/FournisseursContent";
 
 export const metadata: Metadata = {
-  title: "Nos Fournisseurs & Catalogues | ABP Partner",
+  title: "Mes Fournisseurs & Catalogues | ABP Partner",
   description: "Découvrez nos partenaires fabricants et consultez leurs catalogues. Nobilia, Siemens, Bosch et plus encore.",
 };
 

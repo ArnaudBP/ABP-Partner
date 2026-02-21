@@ -19,6 +19,7 @@ const navLinks = [
   { name: "Cuisines", href: "/cuisines" },
   { name: "Salles de Bains", href: "/autres-amenagements/salles-de-bains" },
   { name: "Dressings", href: "/autres-amenagements/dressings" },
+  { name: "Mon Process", href: "/mon-process" },
   { name: "Réalisations", href: "/realisations" },
   { name: "Fournisseurs", href: "/fournisseurs" },
   { name: "Contact", href: "/contact" },
