@@ -1,15 +1,3 @@
-import nodemailer from 'nodemailer';
-
-const transporter = nodemailer.createTransport({
-  host: process.env.SMTP_HOST || 'ssl0.ovh.net',
-  port: Number(process.env.SMTP_PORT) || 587,
-  secure: false, // STARTTLS
-  auth: {
-    user: process.env.SMTP_USER,
-    pass: process.env.SMTP_PASS,
-  },
-});
-
 interface ContactEmailData {
   name: string;
   email: string;
@@ -19,14 +7,15 @@ interface ContactEmailData {
 }
 
 export async function sendContactNotification(data: ContactEmailData): Promise<void> {
-  const to = process.env.CONTACT_EMAIL || 'contact@abp-partner.fr';
-  const from = process.env.SMTP_USER || 'site@abp-partner.fr';
-
-  // Ne pas envoyer si SMTP non configuré
-  if (!process.env.SMTP_USER || !process.env.SMTP_PASS) {
-    console.warn('SMTP non configuré — email non envoyé');
+  const apiKey = process.env.RESEND_API_KEY;
+  
+  if (!apiKey) {
+    console.warn('RESEND_API_KEY non configuré — email non envoyé');
     return;
   }
+
+  const to = process.env.CONTACT_EMAIL || 'contact@abp-partner.fr';
+  const from = 'site@abp-partner.fr';
 
   const phoneLine = data.phone ? `<tr><td style="padding:8px 12px;font-weight:bold;color:#1a1a2e;vertical-align:top;">Téléphone</td><td style="padding:8px 12px;">${data.phone}</td></tr>` : '';
 
@@ -53,12 +42,24 @@ export async function sendContactNotification(data: ContactEmailData): Promise<v
     </div>
   `;
 
-  await transporter.sendMail({
-    from: `"ABP Partner" <${from}>`,
-    to,
-    replyTo: data.email,
-    subject: `[Contact ABP] ${data.subject || 'Nouveau message'} — ${data.name}`,
-    html,
-    text: `Nouveau message de ${data.name} (${data.email}${data.phone ? `, ${data.phone}` : ''})\n\n${data.subject ? `Sujet: ${data.subject}\n\n` : ''}${data.message}`,
+  const response = await fetch('https://api.resend.com/emails', {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${apiKey}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      from: `ABP Partner <site@abp-partner.fr>`,
+      to,
+      reply_to: data.email,
+      subject: `[Contact ABP] ${data.subject || 'Nouveau message'} — ${data.name}`,
+      html,
+      text: `Nouveau message de ${data.name} (${data.email}${data.phone ? `, ${data.phone}` : ''})\n\n${data.subject ? `Sujet: ${data.subject}\n\n` : ''}${data.message}`,
+    }),
   });
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(`Resend error: ${JSON.stringify(error)}`);
+  }
 }
