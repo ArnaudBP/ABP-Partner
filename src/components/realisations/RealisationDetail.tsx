@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
@@ -11,6 +12,8 @@ interface Props {
 }
 
 export default function RealisationDetail({ realisation }: Props) {
+  const [selectedImage, setSelectedImage] = useState(realisation.images[0] || '/placeholder.jpg');
+
   return (
     <section className="pt-32 pb-24 bg-white">
       <div className="max-w-[1800px] mx-auto px-6 md:px-12">
@@ -37,7 +40,7 @@ export default function RealisationDetail({ realisation }: Props) {
           >
             <div className="aspect-[4/3] relative bg-gray-100 mb-4">
               <Image
-                src={realisation.images[0] || '/placeholder.jpg'}
+                src={selectedImage}
                 alt={realisation.title}
                 fill
                 className="object-cover"
@@ -45,15 +48,23 @@ export default function RealisationDetail({ realisation }: Props) {
             </div>
             {realisation.images.length > 1 && (
               <div className="grid grid-cols-3 gap-4">
-                {realisation.images.slice(1, 4).map((img, index) => (
-                  <div key={index} className="aspect-square relative bg-gray-100">
+                {realisation.images.slice(0, 6).map((img, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setSelectedImage(img)}
+                    className={`aspect-square relative bg-gray-100 overflow-hidden transition-all ${
+                      selectedImage === img
+                        ? 'ring-2 ring-abp-gold ring-offset-2'
+                        : 'opacity-60 hover:opacity-100'
+                    }`}
+                  >
                     <Image
                       src={img}
-                      alt={`${realisation.title} - ${index + 2}`}
+                      alt={`${realisation.title} - ${index + 1}`}
                       fill
                       className="object-cover"
                     />
-                  </div>
+                  </button>
                 ))}
               </div>
             )}

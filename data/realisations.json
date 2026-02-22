@@ -77,7 +77,11 @@
       "Carrelage grand format"
     ],
     "images": [
-      "/sdb1.png"
+      "/sdb1.png",
+      "https://ng2q8vkxdebwzhlf.public.blob.vercel-storage.com/realisations/1771756516917-cuisiniste2.jpg",
+      "https://ng2q8vkxdebwzhlf.public.blob.vercel-storage.com/realisations/1771756518355-La_Cuisine_d_Arnaud_-_Arredo3_-_Logo_2019.jpg",
+      "https://ng2q8vkxdebwzhlf.public.blob.vercel-storage.com/realisations/1771756521853-P1040693.jpeg",
+      "https://ng2q8vkxdebwzhlf.public.blob.vercel-storage.com/realisations/1771756523100-Test.jpg"
     ],
     "featured": false,
     "createdAt": "2024-04-05",
