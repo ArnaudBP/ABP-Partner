@@ -42,24 +42,41 @@ export async function sendContactNotification(data: ContactEmailData): Promise<v
     </div>
   `;
 
-  const response = await fetch('https://api.resend.com/emails', {
-    method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${apiKey}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      from: `ABP Partner <site@abp-partner.fr>`,
-      to,
-      reply_to: data.email,
-      subject: `[Contact ABP] ${data.subject || 'Nouveau message'} — ${data.name}`,
-      html,
-      text: `Nouveau message de ${data.name} (${data.email}${data.phone ? `, ${data.phone}` : ''})\n\n${data.subject ? `Sujet: ${data.subject}\n\n` : ''}${data.message}`,
-    }),
-  });
+  const maxRetries = 3;
+  let lastError: Error | null = null;
 
-  if (!response.ok) {
-    const error = await response.json();
-    throw new Error(`Resend error: ${JSON.stringify(error)}`);
+  for (let attempt = 1; attempt <= maxRetries; attempt++) {
+    try {
+      const response = await fetch('https://api.resend.com/emails', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${apiKey}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          from: `ABP Partner <site@abp-partner.fr>`,
+          to,
+          reply_to: data.email,
+          subject: `[Contact ABP] ${data.subject || 'Nouveau message'} — ${data.name}`,
+          html,
+          text: `Nouveau message de ${data.name} (${data.email}${data.phone ? `, ${data.phone}` : ''})\n\n${data.subject ? `Sujet: ${data.subject}\n\n` : ''}${data.message}`,
+        }),
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(`Resend error: ${JSON.stringify(error)}`);
+      }
+
+      return; // Succès
+    } catch (error) {
+      lastError = error as Error;
+      console.error(`Email attempt ${attempt} failed:`, error);
+      if (attempt < maxRetries) {
+        await new Promise(resolve => setTimeout(resolve, 500 * attempt));
+      }
+    }
   }
+
+  throw lastError;
 }
